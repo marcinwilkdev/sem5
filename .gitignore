@@ -1,0 +1,10 @@
+b__*
+main
+*.adb.stderr
+*.adb.stdout
+*.ali
+*.bexch
+*.o
+*.out
+*.hi
+*.class
