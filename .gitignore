@@ -1,5 +1,4 @@
 b__*
-main
 *.adb.stderr
 *.adb.stdout
 *.ali
@@ -8,3 +7,5 @@ main
 *.out
 *.hi
 *.class
+main
+target
