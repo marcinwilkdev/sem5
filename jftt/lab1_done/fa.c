@@ -1,82 +1,75 @@
 #include <string.h>
-#include <limits.h>
+#include <inttypes.h>
 #include <stdbool.h>
-
+#include <stdio.h>
 #include "fa.h"
 
 
-#define NUM_CHARS ((size_t)((int)CHAR_MAX - (int)CHAR_MIN))
+#define BYTE_SIZE (1 << 8)
 
 
-static int createLookupTable(
-    size_t patternLen, const char* pattern, size_t* lookupTable_p);
-static inline size_t* lookupTableEntry(
-    size_t* lookupTable_p, size_t matched, char character);
-static inline bool suffixMatchesPrefix(
-    const char* pattern_p,
-    size_t matchedCount,
-    size_t currMatchedCount,
-    size_t character
-);
+static int parsePattern(const uint8_t* pattern, size_t maxMatched, size_t* lookupTable);
+static inline bool prefixMatchedPostfix(
+    const uint8_t* pattern, size_t newMatched, const uint8_t* wordPattern, uint8_t byte);
 
 
-int faSearch(const char* const pattern_p,
-             const char* const text_p,
+int faSearch(const size_t patternLen,
+             const uint8_t pattern[const patternLen],
+             const size_t textLen,
+             const uint8_t text[const textLen],
              size_t* const patternStart_p)
 {
-    const size_t patternLen = strlen(pattern_p);
-    const size_t textLen = strlen(text_p);
-
-    if (patternLen == 0 && textLen > 0) {
+    if (patternLen == 0 && textLen > 0)
+    {
         *patternStart_p = 0;
         return 0;
     }
 
-    size_t* lookupTable = malloc(sizeof(size_t[patternLen * NUM_CHARS]));
+    const size_t maxMatched = patternLen + 1;
 
-    createLookupTable(patternLen, pattern_p, lookupTable);
+    size_t* const lookupTable_p = calloc(maxMatched * BYTE_SIZE, sizeof(size_t));
+    parsePattern(pattern, maxMatched, lookupTable_p);
 
-    size_t matched = 0;
+    size_t matchedCount = 0;
 
     for (size_t textIdx = 0; textIdx < textLen; ++textIdx)
     {
-        matched = *lookupTableEntry(lookupTable, matched, text_p[textIdx]);
+        matchedCount = lookupTable_p[matchedCount * BYTE_SIZE + text[textIdx]];
 
-        if (matched == patternLen)
+        if (matchedCount == patternLen)
         {
-            *patternStart_p = textIdx - (patternLen - 1);
-
-            free(lookupTable);
+            *patternStart_p = textIdx - patternLen + 1;
+            free(lookupTable_p);
             return 0;
         }
     }
 
-    free(lookupTable);
+    free(lookupTable_p);
     return -1;
 }
 
 
-static int createLookupTable(const size_t patternLen,
-                             const char* const pattern_p,
-                             size_t* const lookupTable_p)
+static int parsePattern(const uint8_t* const pattern,
+                        const size_t maxMatched,
+                        size_t* const lookupTable_p)
 {
-    for (size_t matchedCount = 0; matchedCount < patternLen; ++matchedCount)
+    for (size_t matched = 0; matched < maxMatched - 1; ++matched)
     {
-        for (size_t character = 0; character < NUM_CHARS; ++character)
+        for (size_t byte = 0; byte < BYTE_SIZE; ++byte)
         {
-            size_t currMatchedCount = matchedCount + 1;
+            const size_t maxNewMatched = matched + 1;
 
-            while (currMatchedCount > 0 &&
-                   !suffixMatchesPrefix(pattern_p,
-                                        matchedCount,
-                                        currMatchedCount,
-                                        character))
+            for (size_t wordIdx = 0; wordIdx < maxNewMatched; ++wordIdx)
             {
-                --currMatchedCount;
-            }
+                const size_t newMatched = maxNewMatched - wordIdx;
+                const uint8_t* const wordPattern = &pattern[wordIdx];
 
-            *lookupTableEntry(
-                lookupTable_p, matchedCount, character) = currMatchedCount;
+                if (prefixMatchedPostfix(pattern, newMatched, wordPattern, byte))
+                {
+                    lookupTable_p[matched * BYTE_SIZE + byte] = newMatched;
+                    break;
+                }
+            }
         }
     }
 
@@ -84,39 +77,23 @@ static int createLookupTable(const size_t patternLen,
 }
 
 
-static inline size_t* lookupTableEntry(size_t* const lookupTable_p,
-                                       const size_t matched,
-                                       const char character)
+static inline bool prefixMatchedPostfix(const uint8_t* const pattern,
+                                        const size_t newMatched,
+                                        const uint8_t* const wordPattern,
+                                        const uint8_t byte)
 {
-    // Prevents indexing by negative value if char is signed.
-    const size_t characterIdx = (size_t)((int)character - (int)CHAR_MIN);
-
-    return &lookupTable_p[matched * NUM_CHARS + characterIdx];
-}
-
-
-static inline bool suffixMatchesPrefix(
-    const char* const pattern_p,
-    const size_t matchedCount,
-    const size_t currMatchedCount,
-    const size_t character
-)
-{
-    const size_t suffixOffset = matchedCount + 1 - currMatchedCount;
-
-    if (pattern_p[currMatchedCount - 1] != character) {
-        return false;
-    }
-
-    for (size_t patternIdx = 0;
-         patternIdx < currMatchedCount - 1;
-         ++patternIdx)
+    if (byte == pattern[newMatched - 1])
     {
-        if (pattern_p[patternIdx] != pattern_p[suffixOffset + patternIdx])
+        for (size_t newMatchedIdx = 0; newMatchedIdx < newMatched - 1; ++newMatchedIdx)
         {
-            return false;
+            if (pattern[newMatchedIdx] != wordPattern[newMatchedIdx])
+            {
+                return false;
+            }
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }

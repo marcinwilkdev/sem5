@@ -1,16 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "fa.h"
 
 
 #define BUFFER_LEN 1024
 
 
-int main(int argc, char* argv[argc + 1])
+int main(const int argc, const char* const argv[argc + 1])
 {
     if (argc < 3)
     {
-        fprintf(stderr, "You have to provide pattern and file name.\n");
+        fprintf(stderr, "You have to provide pattern and file.\n");
         return EXIT_FAILURE;
     }
 
@@ -22,24 +23,27 @@ int main(int argc, char* argv[argc + 1])
         return EXIT_FAILURE;
     }
 
-    char buffer[BUFFER_LEN];
-    size_t lineNumber = 0;
+    const size_t patternLen = strlen(argv[1]);
+    const uint8_t* const pattern = (uint8_t*)argv[1];
 
-    // This works based on buffer having full text line ending with \n.
-    // It also can't find multiple occurences in same line.
-    // TODO: Change this so it's more robust.
+    char buffer[BUFFER_LEN];
+    size_t lineCounter = 0;
+
     while (fgets(buffer, BUFFER_LEN, textFile) != NULL)
     {
-        size_t patternStart;
-        const char* searchStart = argv[1];
+        const size_t textLen = strlen(buffer);
+        const uint8_t* text = (uint8_t*)buffer;
 
-        while (faSearch(searchStart, buffer, &patternStart) == 0)
+        size_t offset = 0;
+        size_t patternStart;
+
+        while (faSearch(patternLen, pattern, textLen - offset, &text[offset], &patternStart) == 0)
         {
-            printf("%zu:%zu %s", lineNumber, patternStart, buffer);
-            searchStart = &argv[1][patternStart + 1];
+            printf("%zu:%zu\t%s", lineCounter, offset + patternStart, buffer);
+            offset += patternStart + 1;
         }
 
-        ++lineNumber;
+        ++lineCounter;
     }
 
     fclose(textFile);
