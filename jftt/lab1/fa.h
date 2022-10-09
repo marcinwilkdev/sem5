@@ -1,7 +1,6 @@
 #ifndef FA_H
 #define FA_H
 
-
 #include <stdlib.h>
 
 

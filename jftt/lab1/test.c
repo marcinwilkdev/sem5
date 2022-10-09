@@ -4,9 +4,7 @@
 #include <string.h>
 #include "fa.h"
 #include "kmp.h"
-
-
-typedef int matcherFunc(size_t, const unsigned char*, size_t, const unsigned char*, size_t*);
+#include "lib.h"
 
 
 static void matcherTests(matcherFunc* matcher_p);

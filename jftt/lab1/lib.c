@@ -1,14 +1,9 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "fa.h"
-#include "kmp.h"
+#include "lib.h"
 
 
-#define BUFFER_LEN 1024
-
-
-int main(const int argc, const char* const argv[argc + 1])
+int searchWithMatcher(const int argc, const char* argv[const argc + 1], matcherFunc* const matcher_p)
 {
     if (argc < 3)
     {
@@ -41,7 +36,7 @@ int main(const int argc, const char* const argv[argc + 1])
         size_t matchOffset = 0;
         size_t matchIndex;
 
-        while (kmpSearch(patternLen,
+        while (matcher_p(patternLen,
                         pattern_p,
                         textLen - matchOffset,
                         &text_p[matchOffset],
