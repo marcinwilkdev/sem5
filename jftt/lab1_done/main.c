@@ -15,38 +15,45 @@ int main(const int argc, const char* const argv[argc + 1])
         return EXIT_FAILURE;
     }
 
-    FILE* const textFile = fopen(argv[2], "r");
+    const char* const query_p = argv[1];
+    const char* const fileName_p = argv[2];
 
-    if (textFile == NULL)
+    FILE* const textFile_p = fopen(fileName_p, "r");
+
+    if (textFile_p == NULL)
     {
-        fprintf(stderr, "File %s doesn't exist.\n", argv[2]);
+        fprintf(stderr, "File %s doesn't exist.\n", fileName_p);
         return EXIT_FAILURE;
     }
 
-    const size_t patternLen = strlen(argv[1]);
-    const uint8_t* const pattern = (uint8_t*)argv[1];
+    const size_t patternLen = strlen(query_p);
+    const unsigned char* const pattern_p = (unsigned char*)query_p;
 
     char buffer[BUFFER_LEN];
     size_t lineCounter = 0;
 
-    while (fgets(buffer, BUFFER_LEN, textFile) != NULL)
+    while (fgets(buffer, BUFFER_LEN, textFile_p) != NULL)
     {
         const size_t textLen = strlen(buffer);
-        const uint8_t* text = (uint8_t*)buffer;
+        const unsigned char* text_p = (unsigned char*)buffer;
 
-        size_t offset = 0;
-        size_t patternStart;
+        size_t matchOffset = 0;
+        size_t matchIndex;
 
-        while (faSearch(patternLen, pattern, textLen - offset, &text[offset], &patternStart) == 0)
+        while (faSearch(patternLen,
+                        pattern_p,
+                        textLen - matchOffset,
+                        &text_p[matchOffset],
+                        &matchIndex) == 0)
         {
-            printf("%zu:%zu\t%s", lineCounter, offset + patternStart, buffer);
-            offset += patternStart + 1;
+            printf("%zu:%zu\t%s", lineCounter, matchOffset + matchIndex, buffer);
+            matchOffset += matchIndex + 1;
         }
 
         ++lineCounter;
     }
 
-    fclose(textFile);
+    fclose(textFile_p);
 
     return EXIT_SUCCESS;
 }
