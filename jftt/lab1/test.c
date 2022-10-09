@@ -15,7 +15,7 @@ static void matcherTests(matcherFunc* matcher_p);
 int main(void)
 {
     matcherTests(faSearch);
-    // matcherTests(kmpSearch);
+    matcherTests(kmpSearch);
 
     puts("All tests passed.");
 }

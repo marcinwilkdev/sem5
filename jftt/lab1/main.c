@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "fa.h"
+#include "kmp.h"
 
 
 #define BUFFER_LEN 1024
@@ -40,7 +41,7 @@ int main(const int argc, const char* const argv[argc + 1])
         size_t matchOffset = 0;
         size_t matchIndex;
 
-        while (faSearch(patternLen,
+        while (kmpSearch(patternLen,
                         pattern_p,
                         textLen - matchOffset,
                         &text_p[matchOffset],

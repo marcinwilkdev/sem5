@@ -21,7 +21,12 @@ int faSearch(const size_t patternLen,
              const unsigned char text_p[const textLen],
              size_t* const patternStart_p)
 {
-    if (patternLen == 0 && textLen > 0)
+    if (textLen == 0)
+    {
+        return -1;
+    }
+
+    if (patternLen == 0)
     {
         *patternStart_p = 0;
         return 0;
