@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\begin{document}
+
+\begin{center}
+    \textbf{\LARGE Zadanie 6} \\
+    {\large Marcin Wilk 261722} \\
+\end{center}
+
+\noindent \textbf{Treść zadania:} \\
+Udowodnić lub obalić następujące tożsamości dla wyrażeń regularnych $r$, $s$ i $t$. \\
+
+\[(rs + r)^*r = r(sr + r)^*\]
+
+\noindent \textbf{Dowód indukcyjny:} \\
+Przeprowadzimy indukcję po liczbie powtórzeń wyrażenia regularnego w domknięciu Kleene'ego.
+
+\[(rs + r)^nr = r(sr + r)^n\]
+
+\noindent Dla $n = 0$:
+
+\[(rs + r)^0r = r = r(sr + r)^0\]
+
+\noindent Krok indukcyjny:
+\begin{align*}
+    (rs + r)^{n+1}r & = (rs + r)^n(rs + r)r \\
+    & = (rs + r)^n(rsr + rr) \\
+    & = (rs + r)^nr(sr + r) \\
+    & = r(sr + r)^n(sr + r) \\
+    & = r(sr + r)^{n + 1} \\
+\end{align*}
+
+\[(r + s)^* = r^* + s^*\]
+
+\noindent \textbf{Dowód sprzeczności:} \\
+Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie nie jest prawdziwe. \\
+
+\noindent Dla $r = a$, $s = b$:
+
+\begin{center}
+    $(a + b)^*$ akceptuje $ab$ \\[\baselineskip]
+    $a^* + b^*$ nie akceptuje $ab$ \\[2\baselineskip]
+\end{center}
+
+\[s(rs + s)^*r = rr^*s(rr^*s)^*\]
+
+\noindent \textbf{Dowód sprzeczności:} \\
+Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie nie jest prawdziwe. \\
+
+\noindent Dla $r = a$, $s = b$:
+
+\begin{center}
+    $b(ab + b)^*a$ akceptuje $ba$ \\[\baselineskip]
+    $aa^*b(aa^*b)^*$ nie akceptuje $ba$
+\end{center}
+
+\end{document}

@@ -7,6 +7,9 @@ b__*
 *.out
 *.hi
 *.class
+*.aux
+*.log
+*.pdf
 main
 test
 target
