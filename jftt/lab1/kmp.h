@@ -2,12 +2,13 @@
 #define KMP_H
 
 #include <stdlib.h>
+#include "lib.h"
 
 
-int kmpSearch(size_t patternLen,
-              const unsigned char pattern[patternLen],
-              size_t textLen,
-              const unsigned char text[textLen],
-              size_t* patternStart_p);
+SearchResultE kmpSearch(size_t patternLen,
+                        const unsigned char pattern[patternLen],
+                        size_t textLen,
+                        const unsigned char text[textLen],
+                        size_t* patternStart_p);
 
 #endif

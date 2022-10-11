@@ -15,21 +15,21 @@ static inline bool prefixMatchedPostfix(const unsigned char* pattern_p,
                                         unsigned char byte);
 
 
-int faSearch(const size_t patternLen,
-             const unsigned char pattern_p[const patternLen],
-             const size_t textLen,
-             const unsigned char text_p[const textLen],
-             size_t* const patternStart_p)
+SearchResultE faSearch(const size_t patternLen,
+                       const unsigned char pattern_p[const patternLen],
+                       const size_t textLen,
+                       const unsigned char text_p[const textLen],
+                       size_t* const patternStart_p)
 {
     if (textLen == 0)
     {
-        return -1;
+        return PATTERN_NOT_FOUND;
     }
 
     if (patternLen == 0)
     {
         *patternStart_p = 0;
-        return 0;
+        return PATTERN_FOUND;
     }
 
     const size_t maxMatched = patternLen + 1;
@@ -47,12 +47,12 @@ int faSearch(const size_t patternLen,
         {
             *patternStart_p = textIdx - patternLen + 1;
             free(lookupTable_p);
-            return 0;
+            return PATTERN_FOUND;
         }
     }
 
     free(lookupTable_p);
-    return -1;
+    return PATTERN_NOT_FOUND;
 }
 
 

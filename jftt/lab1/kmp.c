@@ -2,26 +2,26 @@
 #include "kmp.h"
 
 
-static int computePrefixFunction(size_t patternLen,
-                                 const unsigned char pattern[patternLen],
-                                 size_t prefixFunction[patternLen + 1]);
+static void computePrefixFunction(size_t patternLen,
+                                  const unsigned char pattern[patternLen],
+                                  size_t prefixFunction[patternLen + 1]);
 
 
-int kmpSearch(const size_t patternLen,
-              const unsigned char pattern[const patternLen],
-              const size_t textLen,
-              const unsigned char text[const textLen],
-              size_t* const patternStart_p)
+SearchResultE kmpSearch(const size_t patternLen,
+                        const unsigned char pattern[const patternLen],
+                        const size_t textLen,
+                        const unsigned char text[const textLen],
+                        size_t* const patternStart_p)
 {
     if (textLen == 0)
     {
-        return -1;
+        return PATTERN_NOT_FOUND;
     }
 
     if (patternLen == 0)
     {
         *patternStart_p = 0;
-        return 0;
+        return PATTERN_FOUND;
     }
 
     size_t prefixFunction[patternLen + 1];
@@ -45,17 +45,17 @@ int kmpSearch(const size_t patternLen,
         if (matched == patternLen)
         {
             *patternStart_p = textIdx - patternLen + 1;
-            return 0;
+            return PATTERN_FOUND;
         }
     }
 
-    return -1;
+    return PATTERN_NOT_FOUND;
 }
 
 
-static int computePrefixFunction(const size_t patternLen,
-                                 const unsigned char pattern[const patternLen],
-                                 size_t prefixFunction[const patternLen + 1])
+static void computePrefixFunction(const size_t patternLen,
+                                  const unsigned char pattern[const patternLen],
+                                  size_t prefixFunction[const patternLen + 1])
 {
     prefixFunction[0] = 0;
     prefixFunction[1] = 0;
@@ -76,6 +76,4 @@ static int computePrefixFunction(const size_t patternLen,
 
         prefixFunction[matched] = newMatched;
     }
-
-    return 0;
 }
