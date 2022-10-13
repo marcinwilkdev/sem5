@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\begin{document}
+
+\begin{center}
+    \textbf{\LARGE Sprawozdanie lista 1} \\
+    {\large Marcin Wilk 261722} \\
+\end{center}
+
+\noindent \textbf{Zadanie 1} \\[\baselineskip]
+\noindent \textbf{Opis problemu} \\
+Wyznaczyć iteracyjnie epsilon maszynowy, liczbę eta oraz maksymalną wartość dla typów zmiennopozycyjnych zgodnych
+ze standardem IEEE 754 o długości half, single oraz double oraz porównać ich wartości z
+wartościami wbudowanymi w język Julia oraz (dla epsilonu i wartości maksymalnej) język C. \\
+
+\noindent \textbf{Opis rozwiązania} \\
+Bierzemy wartość 1.0 i w każdej iteracji zmniejszamy ją dwukrotnie. W przypadku epsilonu maszynowego
+kończymy iterowanie w momencie, w którym nasza wartość podzielona przez 2.0 i dodana do 1.0 jest równa
+1.0, a w przypadku eta w momencie, w którym nasza wartość podzielona przez 2.0 jest równa 0.0. Otrzymane
+wartości możemy porównać z wartościami wbudowanymi. \\
+
+\noindent Dla wartości maksymalnej bierzemy wartość 1.0 i w każdej iteracji zwiększamy ją dwukrotnie. Pierwsze
+iterowanie kończymy w momencie, w którym nasza wartość pomnożona przez 2.0 jest uznawana za nieskończoność.
+Następnie wykonujemy drugie iterowanie, które jest binary searchem wyszukującym maxa pomiędzy
+naszą wartością, a jej dwukrotną wielokrotnością. \\
+
+\noindent \textbf{Rezultat}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Typ} & \textbf{Eps (Iteracyjnie)} & \textbf{Eps (Julia)} & \textbf{Eps (C)} \\
+    \hline
+    Float16 & $0.000977$ & $0.000977$ & Nie dotyczy \\ 
+    \hline
+    Float32 & $1.1920929\cdot10^{-7}$ & $1.1920929\cdot10^{-7}$ & $1.1920929\cdot10^{-7}$ \\ 
+    \hline
+    Float64 & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Typ} & \textbf{Eta (Iteracyjnie)} & \textbf{Eta (Julia)} \\
+    \hline
+    Float16 & $6.0\cdot10^{-8}$ & $6.0\cdot10^{-8}$ \\ 
+    \hline
+    Float32 & $1.0\cdot10^{-45}$ & $1.0\cdot10^{-45}$ \\ 
+    \hline
+    Float64 & $5.0\cdot10^{-324}$ & $5.0\cdot10^{-324}$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Typ} & \textbf{Max (Iteracyjnie)} & \textbf{Max (Julia)} & \textbf{Max (C)} \\
+    \hline
+    Float16 & $6.55\cdot10^{4}$ & $6.55\cdot10^{4}$ & Nie dotyczy \\ 
+    \hline
+    Float32 & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ \\ 
+    \hline
+    Float64 & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+Iteracyjne metody wyznaczania epsilonu, eta oraz wartości maksymalnej pokrywają się z wartościami
+wbudowanymi w języki Julia oraz C co oznacza, że działają poprawnie. \\
+
+\noindent Precyzja arytmetyki jest połową epsilonu maszynowego. \\
+
+\noindent Liczba eta jest równa liczbie $MIN_{sub}$. \\
+
+\noindent Funkcje \texttt{floatmin} z języka Julia zwracają najmniejsze wartości znormalizowane danego
+typu float czyli są równe $MIN_{nor}$. \\
+\end{document}
