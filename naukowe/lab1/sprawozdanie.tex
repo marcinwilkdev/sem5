@@ -84,4 +84,108 @@ wbudowanymi w języki Julia oraz C co oznacza, że działają poprawnie. \\
 
 \noindent Funkcje \texttt{floatmin} z języka Julia zwracają najmniejsze wartości znormalizowane danego
 typu float czyli są równe $MIN_{nor}$. \\
+
+\pagebreak
+
+\noindent \textbf{Zadanie 2} \\[\baselineskip]
+\noindent \textbf{Opis problemu} \\
+Sprawdzić czy wyrażenie $3(4/3 - 1) - 1$ wyznacza epsilon maszynowy dla typów zmiennopozycyjnych zgodnych
+ze standardem IEEE 754 o długości half, single oraz double. \\
+
+\noindent \textbf{Opis rozwiązania} \\
+Przeprowadzamy kalkulację i porównujemy z wbudowaną wartością. \\
+
+\noindent \textbf{Rezultat}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Typ} & \textbf{Eta (Wykalkulowana)} & \textbf{Eta (Julia)} \\
+    \hline
+    Float16 & $0.000977$ & $0.000977$ \\ 
+    \hline
+    Float32 & $1.1920929\cdot10^{-7}$ & $1.1920929\cdot10^{-7}$ \\ 
+    \hline
+    Float64 & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+Dla wszystkich trzech typów zmiennopozycyjnych zgodnych ze standardem IEEE 754
+działanie $3(4/3 - 1) - 1$ prawidłowo wyznacza epsilon maszynowy. \\
+
+\noindent \textbf{Zadanie 3} \\[\baselineskip]
+\noindent \textbf{Opis problemu} \\
+Sprawdzić czy w arytmetyce \texttt{double} standardu IEEE 754 liczby zmiennopozycyjne są
+równomiernie rozmieszczone w $[1,2]$ z krokiem $\delta=2^{-52}$. \\
+
+\noindent \textbf{Opis rozwiązania} \\
+Bierzemy wartość $1.0$ i w pętli dodajemy do niej $2^{-52}$ sprawdzając
+czy nowa wartość jest równa kolejnej wartości \texttt{float} po poprzedniej wartości.
+Iterowanie przerywamy w momencie, w którym nasza wartość wyniesie $2.0$. Jeżeli
+wszystkie porównania w pętli się sprawdzą to zwracamy prawdę, w przeciwnym wypadku
+zwracamy fałsz. \\
+
+\noindent \textbf{Rezultat} \\
+We wszystkich iteracjach algorytmu porównanie zwróciło prawdę co oznacza potwierdzenie
+tezy postawionej w tym zadaniu. \\
+
+\noindent \textbf{Wnioski} \\
+Dla wszystkich liczb zmiennopozycyjnych w $[1,2]$ cecha musi być identyczna, ponieważ
+odległość między kolejnymi liczbami jest identyczna. Przeprowadzając eksperyment dla innych
+przedziałów możemy również pokazać gdzie cecha jest identyczna i jak rozmieszczone
+są liczby na danym przedziale. Dla przedziału $[\frac{1}{2}, 1]$ odległość między
+kolejnymi liczbami wynosi $2^{-53}$, a dla przedziału $[2, 4]$ $2^{-51}$. \\
+
+\pagebreak
+
+\noindent \textbf{Zadanie 4} \\[\baselineskip]
+\noindent \textbf{Opis problemu} \\
+Znaleźć w arytmetyce \texttt{double} zgodnej z IEEE 754 liczbę zmiennopozycyjną
+w zakresie $1 < x < 2$, taką że $x*(1/x) \neq 1$, a następnie znaleźć najmniejszą
+taką liczbę. \\
+
+\noindent \textbf{Opis rozwiązania} \\
+Zaczynamy od liczby $1.0$ i iteracyjnie sprawdzamy kolejne liczby zmiennopozycyjne
+czy sprawdzają założenie $x*(1/x) \neq 1$. Pierwsza znaleziona liczba będzie
+jednocześnie najmniejszą liczbą w tym przedziale spełniającą to założenie. \\
+
+\noindent \textbf{Rezultat} \\
+\begin{center}
+\begin{tabular}{|c|}
+    \hline
+    \textbf{x} \\
+    \hline
+    $1.000000057228997$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+Z powodu błędów zaokrągleń zmiennopozycyjnych nawet funkcje identycznościowe mogą
+przestać dawać poprawne wyniki jeżeli przeprowadzają działania zmiennopozycyjne. \\
+
+\noindent \textbf{Zadanie 5} \\[\baselineskip]
+\noindent \textbf{Opis problemu} \\
+Sprawdzić jak kolejność działań zmiennopozycyjnych w prostym algorymie obliczającym iloczyn
+skalarny dwóch wektorów wpływa na błąd rezultatu. \\
+
+\noindent \textbf{Opis rozwiązania} \\
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Typ} & \textbf{Max (Iteracyjnie)} & \textbf{Max (Julia)} & \textbf{Max (C)} \\
+    \hline
+    Float16 & $6.55\cdot10^{4}$ & $6.55\cdot10^{4}$ & Nie dotyczy \\ 
+    \hline
+    Float32 & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ \\ 
+    \hline
+    Float64 & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+
 \end{document}
