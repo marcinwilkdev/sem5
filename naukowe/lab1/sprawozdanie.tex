@@ -5,229 +5,239 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
+\usepackage[skip=10pt]{parskip}
 
 \begin{document}
 
 \begin{center}
-    \textbf{\LARGE Sprawozdanie lista 1} \\
-    {\large Marcin Wilk 261722} \\
-\end{center}
+	\textbf{\LARGE Sprawozdanie lista 1} \\
+	{\large Marcin Wilk 261722} \\
 
-\noindent \textbf{Zadanie 1} \\[\baselineskip]
+\end{center}
+\noindent \textbf{\large Zadanie 1}
+
 \noindent \textbf{Opis problemu} \\
 Wyznaczyć iteracyjnie epsilon maszynowy, liczbę eta oraz maksymalną wartość dla typów zmiennopozycyjnych zgodnych
 ze standardem IEEE 754 o długości half, single oraz double oraz porównać ich wartości z
-wartościami wbudowanymi w język Julia oraz (dla epsilonu i wartości maksymalnej) język C. \\
+wartościami wbudowanymi w język Julia oraz (dla epsilonu i wartości maksymalnej) język C.
 
 \noindent \textbf{Opis rozwiązania} \\
-Bierzemy wartość 1.0 i w każdej iteracji zmniejszamy ją dwukrotnie. W przypadku epsilonu maszynowego
-kończymy iterowanie w momencie, w którym nasza wartość podzielona przez 2.0 i dodana do 1.0 jest równa
+Bierzemy wartość 1.0 i w każdej iteracji zmniejszamy ją dwukrotnie. W przypadku epsilonu \\
+maszynowego kończymy iterowanie w momencie, w którym nasza wartość podzielona przez 2.0 i dodana do 1.0 jest równa
 1.0, a w przypadku eta w momencie, w którym nasza wartość podzielona przez 2.0 jest równa 0.0. Otrzymane
-wartości możemy porównać z wartościami wbudowanymi. \\
+wartości możemy porównać z wartościami wbudowanymi.
 
 \noindent Dla wartości maksymalnej bierzemy wartość 1.0 i w każdej iteracji zwiększamy ją dwukrotnie. Pierwsze
 iterowanie kończymy w momencie, w którym nasza wartość pomnożona przez 2.0 jest uznawana za nieskończoność.
 Następnie wykonujemy drugie iterowanie, które jest binary searchem wyszukującym maxa pomiędzy
-naszą wartością, a jej dwukrotną wielokrotnością. \\
+naszą wartością, a jej dwukrotną wielokrotnością.
 
 \noindent \textbf{Rezultat}
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-    \hline
-    \textbf{Typ} & \textbf{Eps (Iteracyjnie)} & \textbf{Eps (Julia)} & \textbf{Eps (C)} \\
-    \hline
-    Float16 & $0.000977$ & $0.000977$ & Nie dotyczy \\ 
-    \hline
-    Float32 & $1.1920929\cdot10^{-7}$ & $1.1920929\cdot10^{-7}$ & $1.1920929\cdot10^{-7}$ \\ 
-    \hline
-    Float64 & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Typ} & \textbf{Eps (Iteracyjnie)}       & \textbf{Eps (Julia)}             & \textbf{Eps (C)}                 \\
+		\hline
+		Float16      & $0.000977$                       & $0.000977$                       & Nie dotyczy                      \\
+		\hline
+		Float32      & $1.1920929\cdot10^{-7}$          & $1.1920929\cdot10^{-7}$          & $1.1920929\cdot10^{-7}$          \\
+		\hline
+		Float64      & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \begin{center}
-\begin{tabular}{|l|l|l|}
-    \hline
-    \textbf{Typ} & \textbf{Eta (Iteracyjnie)} & \textbf{Eta (Julia)} \\
-    \hline
-    Float16 & $6.0\cdot10^{-8}$ & $6.0\cdot10^{-8}$ \\ 
-    \hline
-    Float32 & $1.0\cdot10^{-45}$ & $1.0\cdot10^{-45}$ \\ 
-    \hline
-    Float64 & $5.0\cdot10^{-324}$ & $5.0\cdot10^{-324}$ \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Typ} & \textbf{Eta (Iteracyjnie)} & \textbf{Eta (Julia)} \\
+		\hline
+		Float16      & $6.0\cdot10^{-8}$          & $6.0\cdot10^{-8}$    \\
+		\hline
+		Float32      & $1.0\cdot10^{-45}$         & $1.0\cdot10^{-45}$   \\
+		\hline
+		Float64      & $5.0\cdot10^{-324}$        & $5.0\cdot10^{-324}$  \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-    \hline
-    \textbf{Typ} & \textbf{Max (Iteracyjnie)} & \textbf{Max (Julia)} & \textbf{Max (C)} \\
-    \hline
-    Float16 & $6.55\cdot10^{4}$ & $6.55\cdot10^{4}$ & Nie dotyczy \\ 
-    \hline
-    Float32 & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ \\ 
-    \hline
-    Float64 & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Typ} & \textbf{Max (Iteracyjnie)}        & \textbf{Max (Julia)}              & \textbf{Max (C)}                  \\
+		\hline
+		Float16      & $6.55\cdot10^{4}$                 & $6.55\cdot10^{4}$                 & Nie dotyczy                       \\
+		\hline
+		Float32      & $3.4028235\cdot10^{38}$           & $3.4028235\cdot10^{38}$           & $3.4028235\cdot10^{38}$           \\
+		\hline
+		Float64      & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \noindent \textbf{Wnioski} \\
 Iteracyjne metody wyznaczania epsilonu, eta oraz wartości maksymalnej pokrywają się z wartościami
-wbudowanymi w języki Julia oraz C co oznacza, że działają poprawnie. \\
+wbudowanymi w języki Julia oraz C co oznacza, że działają poprawnie.
 
-\noindent Precyzja arytmetyki jest połową epsilonu maszynowego. \\
+\noindent Precyzja arytmetyki jest połową epsilonu maszynowego.
 
-\noindent Liczba eta jest równa liczbie $MIN_{sub}$. \\
+\noindent Liczba eta jest równa liczbie $MIN_{sub}$.
 
 \noindent Funkcje \texttt{floatmin} z języka Julia zwracają najmniejsze wartości znormalizowane danego
-typu float czyli są równe $MIN_{nor}$. \\
+typu float czyli są równe $MIN_{nor}$.
 
 \pagebreak
 
-\noindent \textbf{Zadanie 2} \\[\baselineskip]
+\noindent \textbf{\large Zadanie 2}
+
 \noindent \textbf{Opis problemu} \\
 Sprawdzić czy wyrażenie $3(4/3 - 1) - 1$ wyznacza epsilon maszynowy dla typów zmiennopozycyjnych zgodnych
-ze standardem IEEE 754 o długości half, single oraz double. \\
+ze standardem IEEE 754 o długości half, single oraz double.
 
 \noindent \textbf{Opis rozwiązania} \\
-Przeprowadzamy kalkulację i porównujemy z wbudowaną wartością. \\
+Przeprowadzamy kalkulację i porównujemy z wbudowaną wartością.
 
 \noindent \textbf{Rezultat}
 
 \begin{center}
-\begin{tabular}{|l|l|l|}
-    \hline
-    \textbf{Typ} & \textbf{Eta (Wykalkulowana)} & \textbf{Eta (Julia)} \\
-    \hline
-    Float16 & $0.000977$ & $0.000977$ \\ 
-    \hline
-    Float32 & $1.1920929\cdot10^{-7}$ & $1.1920929\cdot10^{-7}$ \\ 
-    \hline
-    Float64 & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Typ} & \textbf{Eta (Wykalkulowana)}     & \textbf{Eta (Julia)}             \\
+		\hline
+		Float16      & $0.000977$                       & $0.000977$                       \\
+		\hline
+		Float32      & $1.1920929\cdot10^{-7}$          & $1.1920929\cdot10^{-7}$          \\
+		\hline
+		Float64      & $2.220446049250313\cdot10^{-16}$ & $2.220446049250313\cdot10^{-16}$ \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \noindent \textbf{Wnioski} \\
 Dla wszystkich trzech typów zmiennopozycyjnych zgodnych ze standardem IEEE 754
-działanie $3(4/3 - 1) - 1$ prawidłowo wyznacza epsilon maszynowy. \\
+działanie $3(4/3 - 1) - 1$ prawidłowo wyznacza epsilon maszynowy.
 
-\noindent \textbf{Zadanie 3} \\[\baselineskip]
+\noindent \textbf{\large Zadanie 3}
+
 \noindent \textbf{Opis problemu} \\
 Sprawdzić czy w arytmetyce \texttt{double} standardu IEEE 754 liczby zmiennopozycyjne są
-równomiernie rozmieszczone w $[1,2]$ z krokiem $\delta=2^{-52}$. \\
+równomiernie rozmieszczone w $[1,2]$ z krokiem $\delta=2^{-52}$.
 
 \noindent \textbf{Opis rozwiązania} \\
 Bierzemy wartość $1.0$ i w pętli dodajemy do niej $2^{-52}$ sprawdzając
 czy nowa wartość jest równa kolejnej wartości \texttt{float} po poprzedniej wartości.
 Iterowanie przerywamy w momencie, w którym nasza wartość wyniesie $2.0$. Jeżeli
 wszystkie porównania w pętli się sprawdzą to zwracamy prawdę, w przeciwnym wypadku
-zwracamy fałsz. \\
+zwracamy fałsz.
 
 \noindent \textbf{Rezultat} \\
 We wszystkich iteracjach algorytmu porównanie zwróciło prawdę co oznacza potwierdzenie
-tezy postawionej w tym zadaniu. \\
+tezy postawionej w tym zadaniu.
 
 \noindent \textbf{Wnioski} \\
 Dla wszystkich liczb zmiennopozycyjnych w $[1,2]$ cecha musi być identyczna, ponieważ
 odległość między kolejnymi liczbami jest identyczna. Przeprowadzając eksperyment dla innych
 przedziałów możemy również pokazać gdzie cecha jest identyczna i jak rozmieszczone
-są liczby na danym przedziale. Dla przedziału $[\frac{1}{2}, 1]$ odległość między
-kolejnymi liczbami wynosi $2^{-53}$, a dla przedziału $[2, 4]$ $2^{-51}$. \\
+są liczby na danym \\ przedziale. Dla przedziału $[\frac{1}{2}, 1]$ odległość między
+kolejnymi liczbami wynosi $2^{-53}$, a dla przedziału $[2, 4]$ $2^{-51}$.
 
 \pagebreak
 
-\noindent \textbf{Zadanie 4} \\[\baselineskip]
+\noindent \textbf{\large Zadanie 4}
+
 \noindent \textbf{Opis problemu} \\
 Znaleźć w arytmetyce \texttt{double} zgodnej z IEEE 754 liczbę zmiennopozycyjną
 w zakresie $1 < x < 2$, taką że $x*(1/x) \neq 1$, a następnie znaleźć najmniejszą
-taką liczbę. \\
+taką liczbę.
 
 \noindent \textbf{Opis rozwiązania} \\
 Zaczynamy od liczby $1.0$ i iteracyjnie sprawdzamy kolejne liczby zmiennopozycyjne
 czy sprawdzają założenie $x*(1/x) \neq 1$. Pierwsza znaleziona liczba będzie
-jednocześnie najmniejszą liczbą w tym przedziale spełniającą to założenie. \\
+jednocześnie najmniejszą liczbą w tym przedziale spełniającą to założenie.
 
-\noindent \textbf{Rezultat} \\
+\noindent \textbf{Rezultat}
+
 \begin{center}
-\begin{tabular}{|c|}
-    \hline
-    \textbf{x} \\
-    \hline
-    $1.000000057228997$ \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|c|}
+		\hline
+		\textbf{x}          \\
+		\hline
+		$1.000000057228997$ \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \noindent \textbf{Wnioski} \\
 Z powodu błędów zaokrągleń zmiennopozycyjnych nawet funkcje identycznościowe mogą
-przestać dawać poprawne wyniki jeżeli przeprowadzają działania zmiennopozycyjne. \\
+przestać dawać poprawne wyniki jeżeli przeprowadzają działania zmiennopozycyjne.
 
-\noindent \textbf{Zadanie 5} \\[\baselineskip]
+\noindent \textbf{\large Zadanie 5}
+
 \noindent \textbf{Opis problemu} \\
 Sprawdzić jak kolejność działań zmiennopozycyjnych w prostym algorytmie obliczającym iloczyn
-skalarny dwóch wektorów wpływa na błąd rezultatu w arytmetyce \texttt{float} oraz \texttt{double}. \\
+skalarny dwóch wektorów wpływa na błąd rezultatu w arytmetyce \texttt{float} oraz \texttt{double}.
 
 \noindent \textbf{Opis rozwiązania} \\
 Przeprowadzić obliczenia kilkukrotnie z różną kolejnością działań zmiennopozycyjnych
 i porównać wyniki z rezultatem faktycznym. Przy pierwszym podejściu sumujemy składowe
 po kolei, przy drugim po kolei, ale od tyłu, a przy trzecim i czwartym odpowiednio posortowane
-od największej do najmniejszej i od najmniejszej do największej składowej. \\
+od największej do najmniejszej i od najmniejszej do największej składowej.
 
-\noindent \textbf{Double} \\
+\noindent \textbf{Rezultat}
+
+\noindent \textbf{Double}
 
 \begin{center}
-\begin{tabular}{|l|l|l|}
-    \hline
-    \textbf{Faktyczny rezultat} & \textbf{Po kolei} & \textbf{Po kolei (wstecz)} \\
-    \hline
-    $-1.00657107\cdot10^{-11}$ & $1.0251881368296672\cdot10^{10}$ & $-1.5643308870494366\cdot10^{-10}$  \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Faktyczny rezultat} & \textbf{Po kolei}                & \textbf{Po kolei (wstecz)}         \\
+		\hline
+		$-1.00657107\cdot10^{-11}$  & $1.0251881368296672\cdot10^{10}$ & $-1.5643308870494366\cdot10^{-10}$ \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \begin{center}
-\begin{tabular}{|c|c|}
-    \hline
-    \textbf{Od największych} & \textbf{Od najmniejszych} \\
-    \hline
-    $0.0$ & $0.0$ \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|c|c|}
+		\hline
+		\textbf{Od największych} & \textbf{Od najmniejszych} \\
+		\hline
+		$0.0$                    & $0.0$                     \\
+		\hline
+	\end{tabular}
 \end{center}
 
-\noindent \textbf{Float} \\
+\noindent \textbf{Float}
 
 \begin{center}
-\begin{tabular}{|l|l|l|}
-    \hline
-    \textbf{Faktyczny rezultat} & \textbf{Po kolei} & \textbf{Po kolei (wstecz)} \\
-    \hline
-    $-1.00657107\cdot10^{-11}$ & $-0.4999443$ & $-0.4543457$  \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Faktyczny rezultat} & \textbf{Po kolei} & \textbf{Po kolei (wstecz)} \\
+		\hline
+		$-1.00657107\cdot10^{-11}$  & $-0.4999443$      & $-0.4543457$               \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \begin{center}
-\begin{tabular}{|c|c|}
-    \hline
-    \textbf{Od największych} & \textbf{Od najmniejszych} \\
-    \hline
-    $-0.5$ & $-0.25$ \\ 
-    \hline
-\end{tabular}
+	\begin{tabular}{|c|c|}
+		\hline
+		\textbf{Od największych} & \textbf{Od najmniejszych} \\
+		\hline
+		$-0.5$                   & $-0.25$                   \\
+		\hline
+	\end{tabular}
 \end{center}
 
 \pagebreak
 
 \noindent \textbf{Wnioski} \\
 Kolejność wykonywania działań w algorytmie zdecydowanie wpływa na to jak dokładny wynik dostaniemy,
-co oznacza, że możemy manipulować tą kolejnością w celu otrzymania bardziej dokładnego wyniku. \\
+co oznacza, że możemy manipulować tą kolejnością w celu otrzymania bardziej dokładnego wyniku.
 
-\noindent \textbf{Zadanie 6} \\[\baselineskip]
+\noindent \textbf{\large Zadanie 6}
+
 \noindent \textbf{Opis problemu} \\
 Porównać wyniki dwóch funkcji identycznych z matematycznego punktu widzenia, ale liczonych
 w różny sposób w arytmetyce \texttt{double}:
@@ -236,7 +246,49 @@ w różny sposób w arytmetyce \texttt{double}:
 \[ g(x) = x^2 / ( \sqrt{x^2 + 1} + 1 ) \]
 
 \noindent \textbf{Opis rozwiązania} \\
-Porównać wyniki dwóch funkcji identycznych z matematycznego punktu widzenia, ale liczonych
-w różny sposób:
+Napisać funkcje odopwiadające $f$ oraz $g$, a następnie porównać ich rezultaty dla kolejnych
+ujemnych potęg liczby $8$.
+
+\noindent \textbf{Rezultat}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{$x$} & \textbf{$f(x)$}                   & \textbf{$g(x)$}                   \\
+		\hline
+		$8^{-1}$     & $0.0077822185373186414$           & $0.0077822185373187065$           \\
+		\hline
+		$8^{-2}$     & $0.00012206286282867573$          & $0.00012206286282875901$          \\
+		\hline
+		$8^{-3}$     & $1.9073468138230965\cdot10^{-6}$  & $1.907346813826566\cdot10^{-6}$   \\
+		\hline
+		$8^{-4}$     & $2.9802321943606103\cdot10^{-8}$  & $2.9802321943606116\cdot10^{-8}$  \\
+		\hline
+		$8^{-5}$     & $4.656612873077393\cdot10^{-10}$  & $4.6566128719931904\cdot10^{-10}$ \\
+		\hline
+		$8^{-6}$     & $7.275957614183426\cdot10^{-12}$  & $7.275957614156956\cdot10^{-12}$  \\
+		\hline
+		$8^{-7}$     & $1.1368683772161603\cdot10^{-13}$ & $1.1368683772160957\cdot10^{-13}$ \\
+		\hline
+		$8^{-8}$     & $1.7763568394002505\cdot10^{-15}$ & $1.7763568394002489\cdot10^{-15}$ \\
+		\hline
+		$8^{-9}$     & $0.0$                             & $2.7755575615628914\cdot10^{-17}$ \\
+		\hline
+		$8^{-10}$    & $0.0$                             & $4.336808689942018\cdot10^{-19}$  \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+Obie funkcje dają poprawne wyniki, jednak funkcja $g$ daje poprawne wyniki dla mniejszych
+liczb, w momencie w którym funkcja $f$ z powodu błedów zaokrąglenia daje wynik $0.0$
+co oznacza, że funkcja $g$ jest bardziej wiarygodna.
+\pagebreak
+
+
+\noindent \textbf{\large Zadanie 7}
+
+\noindent \textbf{Opis problemu} \\
+Pochodne
 
 \end{document}

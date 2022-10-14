@@ -10,6 +10,9 @@ b__*
 *.aux
 *.log
 *.pdf
+*.fdb_latexmk
+*.fls
+*.synctex.gz
 main
 test
 target
