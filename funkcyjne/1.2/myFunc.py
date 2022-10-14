@@ -1,6 +1,6 @@
 def myFunc(x, y):
-    return (lambda z : (lambda w : z + 2 * w))(x * y)
-    
+    return (lambda z: (lambda w: z + 2 * w))(x * y)
+
 
 def main():
     print(myFunc(3, 5)(2))

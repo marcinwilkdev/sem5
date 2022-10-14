@@ -168,24 +168,75 @@ przestać dawać poprawne wyniki jeżeli przeprowadzają działania zmiennopozyc
 
 \noindent \textbf{Zadanie 5} \\[\baselineskip]
 \noindent \textbf{Opis problemu} \\
-Sprawdzić jak kolejność działań zmiennopozycyjnych w prostym algorymie obliczającym iloczyn
-skalarny dwóch wektorów wpływa na błąd rezultatu. \\
+Sprawdzić jak kolejność działań zmiennopozycyjnych w prostym algorytmie obliczającym iloczyn
+skalarny dwóch wektorów wpływa na błąd rezultatu w arytmetyce \texttt{float} oraz \texttt{double}. \\
 
 \noindent \textbf{Opis rozwiązania} \\
+Przeprowadzić obliczenia kilkukrotnie z różną kolejnością działań zmiennopozycyjnych
+i porównać wyniki z rezultatem faktycznym. Przy pierwszym podejściu sumujemy składowe
+po kolei, przy drugim po kolei, ale od tyłu, a przy trzecim i czwartym odpowiednio posortowane
+od największej do najmniejszej i od najmniejszej do największej składowej. \\
+
+\noindent \textbf{Double} \\
+
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|l|l|}
     \hline
-    \textbf{Typ} & \textbf{Max (Iteracyjnie)} & \textbf{Max (Julia)} & \textbf{Max (C)} \\
+    \textbf{Faktyczny rezultat} & \textbf{Po kolei} & \textbf{Po kolei (wstecz)} \\
     \hline
-    Float16 & $6.55\cdot10^{4}$ & $6.55\cdot10^{4}$ & Nie dotyczy \\ 
-    \hline
-    Float32 & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ & $3.4028235\cdot10^{38}$ \\ 
-    \hline
-    Float64 & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ & $1.7976931348623157\cdot10^{308}$ \\ 
+    $-1.00657107\cdot10^{-11}$ & $1.0251881368296672\cdot10^{10}$ & $-1.5643308870494366\cdot10^{-10}$  \\ 
     \hline
 \end{tabular}
 \end{center}
 
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+    \textbf{Od największych} & \textbf{Od najmniejszych} \\
+    \hline
+    $0.0$ & $0.0$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\noindent \textbf{Float} \\
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Faktyczny rezultat} & \textbf{Po kolei} & \textbf{Po kolei (wstecz)} \\
+    \hline
+    $-1.00657107\cdot10^{-11}$ & $-0.4999443$ & $-0.4543457$  \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+    \textbf{Od największych} & \textbf{Od najmniejszych} \\
+    \hline
+    $-0.5$ & $-0.25$ \\ 
+    \hline
+\end{tabular}
+\end{center}
+
+\pagebreak
+
 \noindent \textbf{Wnioski} \\
+Kolejność wykonywania działań w algorytmie zdecydowanie wpływa na to jak dokładny wynik dostaniemy,
+co oznacza, że możemy manipulować tą kolejnością w celu otrzymania bardziej dokładnego wyniku. \\
+
+\noindent \textbf{Zadanie 6} \\[\baselineskip]
+\noindent \textbf{Opis problemu} \\
+Porównać wyniki dwóch funkcji identycznych z matematycznego punktu widzenia, ale liczonych
+w różny sposób w arytmetyce \texttt{double}:
+
+\[ f(x) = \sqrt{x^2 + 1} - 1 \]
+\[ g(x) = x^2 / ( \sqrt{x^2 + 1} + 1 ) \]
+
+\noindent \textbf{Opis rozwiązania} \\
+Porównać wyniki dwóch funkcji identycznych z matematycznego punktu widzenia, ale liczonych
+w różny sposób:
 
 \end{document}
