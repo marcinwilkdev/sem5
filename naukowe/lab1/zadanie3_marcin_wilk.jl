@@ -1,3 +1,9 @@
+# Marcin Wilk 261722
+"""
+    checkSpacing(float)
+
+Checks if numbers are evenly spaced between 1.0 and 2.0 `float` type.
+"""
 function checkSpacing(float)
     firstFloat = float(1.0)
     lastFloat = float(2.0)

@@ -1,5 +1,12 @@
-function getMacheps(float)
+# Marcin Wilk 261722
+"""
+    getMacheps(float)
+
+Get machine epsilon for `float` type.
+"""
+function getMacheps(float::Type)
     addition = one(float)
+    Float64(1)
 
     while one(float) + (addition / Float16(2.0)) > one(float)
         addition /= Float16(2.0)
@@ -8,6 +15,11 @@ function getMacheps(float)
     return addition
 end
 
+"""
+    compareMacheps(float)
+
+Compares machine epsilone for `float` type with actual value.
+"""
 function compareMacheps(float)
     ourMacheps = getMacheps(float)
     macheps = eps(float)
@@ -15,6 +27,11 @@ function compareMacheps(float)
     print(string("($float) Smallest number bigger than 1.0: $ourMacheps Eps: $macheps\n"))
 end
 
+"""
+    getEta(float)
+
+Get eta for `float` type.
+"""
 function getEta(float)
     addition = one(float)
 
@@ -25,6 +42,11 @@ function getEta(float)
     return addition
 end
 
+"""
+    compareEta(float)
+
+Compares eta for `float` type with actual value.
+"""
 function compareEta(float)
     ourEta = getEta(float)
     eta = nextfloat(zero(float))
@@ -33,6 +55,11 @@ function compareEta(float)
 
 end
 
+"""
+    getMax(float)
+
+Get max value for `float` type.
+"""
 function getMax(float)
     maxValue = one(float) * Float16(2.0);
 
@@ -53,6 +80,11 @@ function getMax(float)
     return maxValue
 end
 
+"""
+    compareMax(float)
+
+Compares max value for `float` type with actual value.
+"""
 function compareMax(float)
     ourMax = getMax(float)
     maxValue = floatmax(float)

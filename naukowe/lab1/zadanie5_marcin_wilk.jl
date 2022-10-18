@@ -1,3 +1,10 @@
+# Marcin Wilk 261722
+"""
+    scalarProductAhead(x, y)
+
+Calculates scalar product of two arrays by multiplying
+and adding values in given order.
+"""
 function scalarProductAhead(x::Array{T}, y::Array{T}) where {T<:AbstractFloat}
   product = zero(Float16)
 
@@ -8,6 +15,12 @@ function scalarProductAhead(x::Array{T}, y::Array{T}) where {T<:AbstractFloat}
   return product
 end
 
+"""
+    scalarProductReverse(x, y)
+
+Calculates scalar product of two arrays by multiplying
+and adding values in reversed order.
+"""
 function scalarProductReverse(x::Array{T}, y::Array{T}) where {T<:AbstractFloat}
   product = zero(Float16)
 
@@ -18,6 +31,12 @@ function scalarProductReverse(x::Array{T}, y::Array{T}) where {T<:AbstractFloat}
   return product
 end
 
+"""
+    scalarProductBiggestFirst(x, y)
+
+Calculates scalar product of two arrays by multiplying
+and adding values after sorting them in descending order.
+"""
 function scalarProductBiggestFirst(x::Array{T}, y::Array{T}) where {T<:AbstractFloat}
   products = Array{T,1}(undef, length(x))
 
@@ -45,6 +64,12 @@ function scalarProductBiggestFirst(x::Array{T}, y::Array{T}) where {T<:AbstractF
   return product
 end
 
+"""
+    scalarProductBiggestFirst(x, y)
+
+Calculates scalar product of two arrays by multiplying
+and adding values after sorting them in ascending order.
+"""
 function scalarProductSmallestFirst(x::Array{T}, y::Array{T}) where {T<:AbstractFloat}
   products = Array{T,1}(undef, length(x))
 

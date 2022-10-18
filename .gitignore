@@ -1,6 +1,7 @@
 b__*
-*.adb.stderr
-*.adb.stdout
+*.stderr
+*.stdout
+*.d
 *.ali
 *.bexch
 *.o
@@ -13,6 +14,8 @@ b__*
 *.fdb_latexmk
 *.fls
 *.synctex.gz
+*.a
+*.deps
 main
 test
 target
