@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 #include "lib.h"
 
 
@@ -40,14 +41,14 @@ int gcd(int firstNumber, int secondNumber)
 }
 
 
-void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
+int extendedEuclidean(int firstNumber, int secondNumber, int thirdNumber, PairS* const result_p)
 {
-  if (firstNumber == 0 || secondNumber == 0)
+  if (firstNumber == 0 || secondNumber == 0 || thirdNumber == 0)
   {
     result_p->first = 0;
     result_p->second = 0;
 
-    return;
+    return -1;
   }
 
   bool flipped = false;
@@ -60,6 +61,15 @@ void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
 
     flipped = true;
   }
+
+  const int gcdResult = gcd(firstNumber, secondNumber);
+
+  if (thirdNumber % gcdResult != 0)
+  {
+    return -1;
+  }
+
+  const int multiplier = thirdNumber / gcdResult;
   
   int firstCoefficient = 0;
   int secondCoefficient = 1;
@@ -86,6 +96,9 @@ void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
     oldSecondCoefficient = tmpSecondCoefficient;
   }
 
+  oldFirstCoefficient *= multiplier;
+  oldSecondCoefficient *= multiplier;
+
   if (flipped)
   {
     result_p->first = oldSecondCoefficient;
@@ -96,4 +109,6 @@ void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
     result_p->first = oldFirstCoefficient;
     result_p->second = oldSecondCoefficient;
   }
+
+  return 0;
 }

@@ -1,15 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include "lib.h"
+#include "lib_req.h"
 
 
 static void factorialTest(void);
 static void gcdTest(void);
 static void extendedEuclideanTest(void);
 
-static inline void extendedEuclideanTestNoZeros(int firstNumber, int secondNumber);
+static inline void extendedEuclideanTestNoZeros(int firstNumber, int secondNumber, int thirdNumber);
 static inline void extendedEuclideanTestZeros(void);
+static inline void extendedEuclideanTestNoResults(int firstNumber, int secondNumber, int thirdNumber);
 
 
 int main(void)
@@ -55,34 +56,43 @@ static void gcdTest(void)
 
 static void extendedEuclideanTest(void)
 {
-  extendedEuclideanTestNoZeros(82, 12);
-  extendedEuclideanTestNoZeros(12, 63);
-  extendedEuclideanTestNoZeros(8, 15);
-  extendedEuclideanTestNoZeros(1234, 432);
-  extendedEuclideanTestNoZeros(90, 5);
+  extendedEuclideanTestNoZeros(82, 12, 8);
+  extendedEuclideanTestNoZeros(12, 63, 12);
+  extendedEuclideanTestNoZeros(8, 15, 19);
+  extendedEuclideanTestNoZeros(1234, 432, 8);
+  extendedEuclideanTestNoZeros(90, 5, 25);
 
   extendedEuclideanTestZeros();
+
+  extendedEuclideanTestNoResults(82, 12, 1);
+  extendedEuclideanTestNoResults(1234, 432, 9);
 }
 
 
-static inline void extendedEuclideanTestNoZeros(const int firstNumber, const int secondNumber)
+static inline void extendedEuclideanTestNoZeros(const int firstNumber, const int secondNumber, const int thirdNumber)
 {
   PairS extendedEuclideanResult;
-  extendedEuclidean(firstNumber, secondNumber, &extendedEuclideanResult);
+  assert(extendedEuclidean(firstNumber, secondNumber, thirdNumber, &extendedEuclideanResult) == 0);
   assert((firstNumber * extendedEuclideanResult.first +
           secondNumber * extendedEuclideanResult.second) ==
-         gcd(firstNumber, secondNumber));
-  printf("Passed for (%d, %d)\n", firstNumber, secondNumber);
+         thirdNumber);
 }
 
 
 static inline void extendedEuclideanTestZeros(void)
 {
   PairS extendedEuclideanResult;
-  extendedEuclidean(0, 0, &extendedEuclideanResult);
+  extendedEuclidean(0, 0, 0, &extendedEuclideanResult);
   assert(extendedEuclideanResult.first == 0 && extendedEuclideanResult.second == 0);
-  extendedEuclidean(1, 0, &extendedEuclideanResult);
+  extendedEuclidean(1, 0, 0, &extendedEuclideanResult);
   assert(extendedEuclideanResult.first == 0 && extendedEuclideanResult.second == 0);
-  extendedEuclidean(0, 1, &extendedEuclideanResult);
+  extendedEuclidean(0, 1, 0, &extendedEuclideanResult);
   assert(extendedEuclideanResult.first == 0 && extendedEuclideanResult.second == 0);
+}
+
+
+static inline void extendedEuclideanTestNoResults(int firstNumber, int secondNumber, int thirdNumber)
+{
+  PairS extendedEuclideanResult;
+  assert(extendedEuclidean(firstNumber, secondNumber, thirdNumber, &extendedEuclideanResult) == -1);
 }

@@ -44,14 +44,14 @@ int gcd(const int firstNumber, const int secondNumber)
 }
 
 
-void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
+int extendedEuclidean(int firstNumber, int secondNumber, int thirdNumber, PairS* const result_p)
 {
-  if (firstNumber == 0 || secondNumber == 0)
+  if (firstNumber == 0 || secondNumber == 0 || thirdNumber == 0)
   {
     result_p->first = 0;
     result_p->second = 0;
 
-    return;
+    return -1;
   }
 
   bool flipped = false;
@@ -65,6 +65,15 @@ void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
     flipped = true;
   }
 
+  const int gcdResult = gcd(firstNumber, secondNumber);
+
+  if (thirdNumber % gcdResult != 0)
+  {
+    return -1;
+  }
+
+  const int multiplier = thirdNumber / gcdResult;
+
   ExtendedEuclideanS extendedEuclideanData =
   {
     .firstCoefficient = 0,
@@ -77,6 +86,9 @@ void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
 
   extendedEuclideanReq(&extendedEuclideanData);
 
+  extendedEuclideanData.oldFirstCoefficient *= multiplier;
+  extendedEuclideanData.oldSecondCoefficient *= multiplier;
+
   if (flipped)
   {
     result_p->first = extendedEuclideanData.oldSecondCoefficient;
@@ -87,6 +99,8 @@ void extendedEuclidean(int firstNumber, int secondNumber, PairS* const result_p)
     result_p->first = extendedEuclideanData.oldFirstCoefficient;
     result_p->second = extendedEuclideanData.oldSecondCoefficient;
   }
+
+  return 0;
 }
 
 

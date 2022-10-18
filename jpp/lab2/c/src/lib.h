@@ -16,7 +16,7 @@ struct PairS
 
 size_t factorial(size_t n);
 int gcd(int firstNumber, int secondNumber);
-void extendedEuclidean(int firstNumber, int secondNumber, PairS* result_p);
+int extendedEuclidean(int firstNumber, int secondNumber, int thirdNumber, PairS* result);
 
 
 #endif
