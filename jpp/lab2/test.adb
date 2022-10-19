@@ -1,8 +1,36 @@
 with Ada.Text_IO; use Ada.Text_IO;
-with Test_Lib;    use Test_Lib;
-with Lib_Req;     use Lib_Req;
+with Lib;         use Lib;
 
-procedure Test_Req is
+procedure Test is
+  -- type Mod_Int is mod 2**64;
+
+  -- type Pair is record
+  --   First_Number  : Integer;
+  --   Second_Number : Integer;
+  -- end record with
+  --  Convention => C;
+
+  -- function Factorial (N : Mod_Int) return Mod_Int with
+  --  Import => True, Convention => C, External_Name => "factorial";
+
+  -- function Gcd
+  --  (First_Number : Integer; Second_Number : Integer) return Integer with
+  --  Import => True, Convention => C, External_Name => "gcd";
+
+  -- function Extended_Euclidean
+  --  (First_Number :    Integer; Second_Number : Integer; Third_Number : Integer;
+  --   Result       : in out Pair) return Integer with
+  --  Import => True, Convention => C, External_Name => "extendedEuclidean";
+
+  -- =============================================================================
+
+  procedure Assert (Assertion : Boolean) is
+  begin
+    if not Assertion then
+      raise Program_Error with "Assertion failed";
+    end if;
+  end Assert;
+
   procedure Extended_Euclidean_Test_No_Zeros
    (First_Number : Integer; Second_Number : Integer; Third_Number : Integer)
   is
@@ -21,9 +49,9 @@ procedure Test_Req is
   procedure Extended_Euclidean_Test_Zeros is
     Result : Pair;
   begin
-    Assert(Extended_Euclidean (0, 0, 0, Result) = -1);
-    Assert(Extended_Euclidean (1, 0, 0, Result) = -1);
-    Assert(Extended_Euclidean (0, 1, 0, Result) = -1);
+    Assert (Extended_Euclidean (0, 0, 0, Result) = -1);
+    Assert (Extended_Euclidean (1, 0, 0, Result) = -1);
+    Assert (Extended_Euclidean (0, 1, 0, Result) = -1);
   end Extended_Euclidean_Test_Zeros;
 
   procedure Extended_Euclidean_Test_No_Results
@@ -31,7 +59,9 @@ procedure Test_Req is
   is
     Result : Pair;
   begin
-    Assert (Extended_Euclidean (First_Number, Second_Number, Third_Number, Result) = -1);
+    Assert
+     (Extended_Euclidean (First_Number, Second_Number, Third_Number, Result) =
+      -1);
   end Extended_Euclidean_Test_No_Results;
 begin
   Assert (Factorial (0) = 1);
@@ -63,4 +93,4 @@ begin
   Extended_Euclidean_Test_No_Results (1_234, 432, 9);
 
   Put_Line ("All tests passed");
-end Test_Req;
+end Test;
