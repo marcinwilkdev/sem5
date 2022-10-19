@@ -83,6 +83,18 @@ const _ackermann_mem = (table, m, n) => {
     return n + 1;
   }
 
+  if (m == 1) {
+    return n + 2;
+  }
+
+  if (m == 2) {
+    return 2 * n + 3;
+  }
+
+  if (m == 3) {
+    return Math.pow(2, n + 3) - 3;
+  }
+
   if (table.length <= m) {
     for (let i = table.length; i <= m; i++) {
       table.push([]);
@@ -107,8 +119,6 @@ const ackermann_mem = (m, n) => {
 
   const result = _ackermann_mem(table, m, n);
 
-  console.log(table);
-
   return result;
 };
 
@@ -121,4 +131,6 @@ console.log(min([5, 2, 3, 4]));
 console.log(max([1, 2, 3, 4]));
 console.log(sumSquares(10));
 console.log(ackermann(3, 10));
-console.log(ackermann_mem(3, 22));
+console.log(ackermann_mem(3, 23));
+console.log(ackermann_mem(3, 24));
+console.log(ackermann_mem(3, 1000));
