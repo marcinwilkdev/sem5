@@ -55,6 +55,10 @@ package body Lib is
     Quotient               : Integer;
   begin
 
+    if First_Number = 0 or Second_Number = 0 then
+      return (-1, 0, 0);
+    end if;
+
     if First_Number < Second_Number then
       Tmp_Remainder := Remainder;
       Remainder     := Old_Remainder;

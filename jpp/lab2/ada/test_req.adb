@@ -17,6 +17,24 @@ procedure Test_Req is
        (Second_Number * Extended_Euclidean_R.Second_Number)) =
       Third_Number);
   end Extended_Euclidean_Test_No_Zeros;
+
+  procedure Extended_Euclidean_Test_Zeros is
+    Extended_Euclidean_R : Extended_Euclidean_Result;
+  begin
+    Extended_Euclidean_R := Extended_Euclidean (0, 0, 0);
+    Assert (Extended_Euclidean_R.Is_Result = -1);
+    Extended_Euclidean_R := Extended_Euclidean (1, 0, 0);
+    Assert (Extended_Euclidean_R.Is_Result = -1);
+    Extended_Euclidean_R := Extended_Euclidean (0, 1, 0);
+    Assert (Extended_Euclidean_R.Is_Result = -1);
+  end Extended_Euclidean_Test_Zeros;
+
+  procedure Extended_Euclidean_Test_No_Results (First_Number : Integer; Second_Number : Integer; Third_Number : Integer) is
+    Extended_Euclidean_R : Extended_Euclidean_Result;
+  begin
+    Extended_Euclidean_R := Extended_Euclidean (First_Number, Second_Number, Third_Number);
+    Assert (Extended_Euclidean_R.Is_Result = -1);
+  end Extended_Euclidean_Test_No_Results;
 begin
   Assert (Factorial (0) = 1);
   Assert (Factorial (1) = 1);
@@ -40,6 +58,11 @@ begin
   Extended_Euclidean_Test_No_Zeros (8, 15, 19);
   Extended_Euclidean_Test_No_Zeros (1_234, 432, 8);
   Extended_Euclidean_Test_No_Zeros (90, 5, 25);
+
+  Extended_Euclidean_Test_Zeros;
+
+  Extended_Euclidean_Test_No_Results (82, 12, 1);
+  Extended_Euclidean_Test_No_Results (1234, 432, 9);
 
   Put_Line ("All tests passed");
 end Test_Req;
