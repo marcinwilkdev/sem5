@@ -55,7 +55,7 @@ package body Lib is
     Quotient               : Integer;
   begin
 
-    if First_Number = 0 or Second_Number = 0 then
+    if First_Number = 0 or Second_Number = 0 or Third_Number = 0 then
       Result := (0, 0);
       return -1;
     end if;

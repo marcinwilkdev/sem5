@@ -66,6 +66,9 @@ int extendedEuclidean(int firstNumber, int secondNumber, int thirdNumber, PairS*
 
   if (thirdNumber % gcdResult != 0)
   {
+    result_p->first = 0;
+    result_p->second = 0;
+
     return -1;
   }
 

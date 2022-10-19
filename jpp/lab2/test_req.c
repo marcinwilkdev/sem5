@@ -82,11 +82,11 @@ static inline void extendedEuclideanTestNoZeros(const int firstNumber, const int
 static inline void extendedEuclideanTestZeros(void)
 {
   PairS extendedEuclideanResult;
-  extendedEuclidean(0, 0, 0, &extendedEuclideanResult);
+  assert(extendedEuclidean(0, 0, 0, &extendedEuclideanResult) == -1);
   assert(extendedEuclideanResult.first == 0 && extendedEuclideanResult.second == 0);
-  extendedEuclidean(1, 0, 0, &extendedEuclideanResult);
+  assert(extendedEuclidean(1, 0, 0, &extendedEuclideanResult) == -1);
   assert(extendedEuclideanResult.first == 0 && extendedEuclideanResult.second == 0);
-  extendedEuclidean(0, 1, 0, &extendedEuclideanResult);
+  assert(extendedEuclidean(0, 1, 0, &extendedEuclideanResult) == -1);
   assert(extendedEuclideanResult.first == 0 && extendedEuclideanResult.second == 0);
 }
 

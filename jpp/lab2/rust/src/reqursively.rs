@@ -74,13 +74,14 @@ impl Algorithms for Reqursively {
     fn extended_euclidean_algorithm(
         mut first_number: i32,
         mut second_number: i32,
+        third_number: i32,
         extended_euclidean_result: &mut crate::ExtendedEuclideanResult,
-    ) {
-        if first_number == 0 || second_number == 0 {
+    ) -> bool {
+        if first_number == 0 || second_number == 0 || third_number == 0 {
             extended_euclidean_result.0 = 0;
             extended_euclidean_result.1 = 0;
 
-            return;
+            return false;
         }
 
         let mut flipped = false;
@@ -93,6 +94,17 @@ impl Algorithms for Reqursively {
             flipped = true;
         }
 
+        let gcd_result = Self::gcd(first_number, second_number);
+
+        if third_number % gcd_result != 0 {
+            extended_euclidean_result.0 = 0;
+            extended_euclidean_result.1 = 0;
+
+            return false;
+        }
+
+        let multiplier = third_number / gcd_result;
+
         let mut extended_euclidean_data = ExtendedEuclideanData {
             first_coefficient: 0,
             second_coefficient: 1,
@@ -104,6 +116,9 @@ impl Algorithms for Reqursively {
 
         Reqursively::extended_euclidean_req(&mut extended_euclidean_data);
 
+        extended_euclidean_data.old_first_coefficient *= multiplier;
+        extended_euclidean_data.old_second_coefficient *= multiplier;
+
         if flipped {
             extended_euclidean_result.0 = extended_euclidean_data.old_second_coefficient;
             extended_euclidean_result.1 = extended_euclidean_data.old_first_coefficient;
@@ -111,6 +126,8 @@ impl Algorithms for Reqursively {
             extended_euclidean_result.0 = extended_euclidean_data.old_first_coefficient;
             extended_euclidean_result.1 = extended_euclidean_data.old_second_coefficient;
         }
+
+        return true;
     }
 }
 

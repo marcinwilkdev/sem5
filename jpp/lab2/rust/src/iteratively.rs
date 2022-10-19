@@ -36,13 +36,14 @@ impl Algorithms for Iteratively {
     fn extended_euclidean_algorithm(
         mut first_number: i32,
         mut second_number: i32,
+        third_number: i32,
         extended_euclidean_result: &mut crate::ExtendedEuclideanResult,
-    ) {
-        if first_number == 0 || second_number == 0 {
+    ) -> bool {
+        if first_number == 0 || second_number == 0 || third_number == 0 {
             extended_euclidean_result.0 = 0;
             extended_euclidean_result.1 = 0;
 
-            return;
+            return false;
         }
 
         let mut flipped = false;
@@ -54,6 +55,17 @@ impl Algorithms for Iteratively {
 
             flipped = true;
         }
+
+        let gcd_result = Self::gcd(first_number, second_number);
+
+        if third_number % gcd_result != 0 {
+            extended_euclidean_result.0 = 0;
+            extended_euclidean_result.1 = 0;
+
+            return false;
+        }
+
+        let multiplier = third_number / gcd_result;
 
         let mut first_coefficient = 0;
         let mut second_coefficient = 1;
@@ -79,6 +91,9 @@ impl Algorithms for Iteratively {
             old_second_coefficient = tmp_second_coefficient;
         }
 
+        old_first_coefficient *= multiplier;
+        old_second_coefficient *= multiplier;
+
         if flipped {
             extended_euclidean_result.0 = old_second_coefficient;
             extended_euclidean_result.1 = old_first_coefficient;
@@ -86,6 +101,8 @@ impl Algorithms for Iteratively {
             extended_euclidean_result.0 = old_first_coefficient;
             extended_euclidean_result.1 = old_second_coefficient;
         }
+
+        true
     }
 }
 

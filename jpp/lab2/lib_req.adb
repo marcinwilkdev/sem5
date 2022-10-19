@@ -97,7 +97,7 @@ package body Lib_Req is
     Extended_Euclidean_Data_R : Extended_Euclidean_Data;
   begin
 
-    if First_Number_Copy = 0 or Second_Number_Copy = 0 then
+    if First_Number_Copy = 0 or Second_Number_Copy = 0 or Third_Number = 0 then
       Result := (0, 0);
       return -1;
     end if;

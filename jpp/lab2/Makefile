@@ -1,8 +1,8 @@
 ada:
-	gcc -c lib.adb test.adb && gnatbind test.ali && gnatlink test.ali && rm *.ali && ./test
+	gcc -c lib.adb test.adb && gnatbind test.ali && gnatlink test.ali && rm *.o *.ali && ./test
 
 ada_req:
-	gcc -c lib_req.adb test_req.adb && gnatbind test_req.ali && gnatlink test_req.ali && rm *.ali && ./test_req
+	gcc -c lib_req.adb test_req.adb && gnatbind test_req.ali && gnatlink test_req.ali && rm *.o *.ali && ./test_req
 
 c:
 	gcc lib.c test.c -o test && ./test
@@ -21,3 +21,9 @@ c_ada:
 
 c_ada_req:
 	gcc -c lib_req.c test_req.adb && gnatbind test_req.ali && gnatlink test_req.ali lib_req.o && rm *.o *.ali && ./test_req
+
+static:
+	gcc -c lib.c && ar rcs lib.a lib.o
+
+static_req:
+	gcc -c lib_req.c && ar rcs lib_req.a lib_req.o
