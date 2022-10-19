@@ -136,7 +136,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn iteratively_test() {
+    fn reqursively_test() {
         <Reqursively as Algorithms>::algorithms_test();
     }
 }
