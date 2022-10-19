@@ -6,34 +6,32 @@ procedure Test_Req is
   procedure Extended_Euclidean_Test_No_Zeros
    (First_Number : Integer; Second_Number : Integer; Third_Number : Integer)
   is
-    Extended_Euclidean_R : Extended_Euclidean_Result;
+    Result : Pair;
   begin
-    Extended_Euclidean_R :=
-     Extended_Euclidean (First_Number, Second_Number, Third_Number);
-    Assert (Extended_Euclidean_R.Is_Result = 0);
+    Assert
+     (Extended_Euclidean (First_Number, Second_Number, Third_Number, Result) =
+      0);
     Assert
      (
-      ((First_Number * Extended_Euclidean_R.First_Number) +
-       (Second_Number * Extended_Euclidean_R.Second_Number)) =
+      ((First_Number * Result.First_Number) +
+       (Second_Number * Result.Second_Number)) =
       Third_Number);
   end Extended_Euclidean_Test_No_Zeros;
 
   procedure Extended_Euclidean_Test_Zeros is
-    Extended_Euclidean_R : Extended_Euclidean_Result;
+    Result : Pair;
   begin
-    Extended_Euclidean_R := Extended_Euclidean (0, 0, 0);
-    Assert (Extended_Euclidean_R.Is_Result = -1);
-    Extended_Euclidean_R := Extended_Euclidean (1, 0, 0);
-    Assert (Extended_Euclidean_R.Is_Result = -1);
-    Extended_Euclidean_R := Extended_Euclidean (0, 1, 0);
-    Assert (Extended_Euclidean_R.Is_Result = -1);
+    Assert(Extended_Euclidean (0, 0, 0, Result) = -1);
+    Assert(Extended_Euclidean (1, 0, 0, Result) = -1);
+    Assert(Extended_Euclidean (0, 1, 0, Result) = -1);
   end Extended_Euclidean_Test_Zeros;
 
-  procedure Extended_Euclidean_Test_No_Results (First_Number : Integer; Second_Number : Integer; Third_Number : Integer) is
-    Extended_Euclidean_R : Extended_Euclidean_Result;
+  procedure Extended_Euclidean_Test_No_Results
+   (First_Number : Integer; Second_Number : Integer; Third_Number : Integer)
+  is
+    Result : Pair;
   begin
-    Extended_Euclidean_R := Extended_Euclidean (First_Number, Second_Number, Third_Number);
-    Assert (Extended_Euclidean_R.Is_Result = -1);
+    Assert (Extended_Euclidean (First_Number, Second_Number, Third_Number, Result) = -1);
   end Extended_Euclidean_Test_No_Results;
 begin
   Assert (Factorial (0) = 1);
@@ -62,7 +60,7 @@ begin
   Extended_Euclidean_Test_Zeros;
 
   Extended_Euclidean_Test_No_Results (82, 12, 1);
-  Extended_Euclidean_Test_No_Results (1234, 432, 9);
+  Extended_Euclidean_Test_No_Results (1_234, 432, 9);
 
   Put_Line ("All tests passed");
 end Test_Req;

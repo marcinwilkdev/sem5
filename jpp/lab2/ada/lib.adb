@@ -37,8 +37,8 @@ package body Lib is
   end Gcd;
 
   function Extended_Euclidean
-   (First_Number : Integer; Second_Number : Integer; Third_Number : Integer)
-    return Extended_Euclidean_Result
+   (First_Number :    Integer; Second_Number : Integer; Third_Number : Integer;
+    Result       : in out Pair) return Integer
   is
     Gcd_Result             : Integer;
     Multiplier             : Integer;
@@ -56,7 +56,8 @@ package body Lib is
   begin
 
     if First_Number = 0 or Second_Number = 0 then
-      return (-1, 0, 0);
+      Result := (0, 0);
+      return -1;
     end if;
 
     if First_Number < Second_Number then
@@ -69,7 +70,8 @@ package body Lib is
     Gcd_Result := Gcd (First_Number, Second_Number);
 
     if Third_Number rem Gcd_Result /= 0 then
-      return (-1, 0, 0);
+      Result := (0, 0);
+      return -1;
     end if;
 
     Multiplier := Third_Number / Gcd_Result;
@@ -96,9 +98,11 @@ package body Lib is
     Old_Second_Coefficient := Old_Second_Coefficient * Multiplier;
 
     if Flipped then
-      return (0, Old_Second_Coefficient, Old_First_Coefficient);
+      Result := (Old_Second_Coefficient, Old_First_Coefficient);
+      return 0;
     else
-      return (0, Old_First_Coefficient, Old_Second_Coefficient);
+      Result := (Old_First_Coefficient, Old_Second_Coefficient);
+      return 0;
     end if;
 
   end Extended_Euclidean;
