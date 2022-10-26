@@ -1,8 +1,8 @@
 def main():
     print("W not #a commentorks")  # this is another comment
     print("W not #a commentorks")  # this is "another comment"
-    print(""" not #a #asdfasdf
-          # asdfasdf comment""")  # orks" """)
+    print(""" not #a #asdfa"sdf
+          # (as""dfasdf comment""")  # orks" """)
     # this is a comment
 
 
