@@ -1,10 +1,11 @@
 \documentclass{article}
 \usepackage[margin=1.25in]{geometry}
-\usepackage{amsmath, amssymb}
+\usepackage{amsmath, amssymb, amsthm}
 \usepackage{graphicx}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
+\usepackage[skip=10pt]{parskip}
 
 \begin{document}
 
@@ -14,10 +15,11 @@
 \end{center}
 
 \noindent \textbf{Treść zadania:} \\
-Udowodnić lub obalić następujące tożsamości dla wyrażeń regularnych $r$, $s$ i $t$. \\
+Udowodnić lub obalić następujące tożsamości dla wyrażeń regularnych $r$, $s$ i $t$.
 
 \[(rs + r)^*r = r(sr + r)^*\]
 
+\begin{proof}[\unskip\nopunct]
 \noindent \textbf{Dowód indukcyjny:} \\
 Przeprowadzimy indukcję po liczbie powtórzeń wyrażenia regularnego w domknięciu Kleene'ego.
 
@@ -35,11 +37,13 @@ Przeprowadzimy indukcję po liczbie powtórzeń wyrażenia regularnego w domkni�
     & = r(sr + r)^n(sr + r) \\
     & = r(sr + r)^{n + 1} \\
 \end{align*}
+\end{proof}
 
 \[(r + s)^* = r^* + s^*\]
 
+\begin{proof}[\unskip\nopunct]
 \noindent \textbf{Dowód sprzeczności:} \\
-Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie nie jest prawdziwe. \\
+Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie nie jest prawdziwe.
 
 \noindent Dla $r = a$, $s = b$:
 
@@ -47,11 +51,15 @@ Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie ni
     $(a + b)^*$ akceptuje $ab$ \\[\baselineskip]
     $a^* + b^*$ nie akceptuje $ab$ \\[2\baselineskip]
 \end{center}
+\end{proof}
+
+\pagebreak
 
 \[s(rs + s)^*r = rr^*s(rr^*s)^*\]
 
+\begin{proof}[\unskip\nopunct]
 \noindent \textbf{Dowód sprzeczności:} \\
-Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie nie jest prawdziwe. \\
+Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie nie jest prawdziwe.
 
 \noindent Dla $r = a$, $s = b$:
 
@@ -59,5 +67,6 @@ Podamy przykład, w którym równość nie zachodzi co oznacza, że równanie ni
     $b(ab + b)^*a$ akceptuje $ba$ \\[\baselineskip]
     $aa^*b(aa^*b)^*$ nie akceptuje $ba$
 \end{center}
+\end{proof}
 
 \end{document}
