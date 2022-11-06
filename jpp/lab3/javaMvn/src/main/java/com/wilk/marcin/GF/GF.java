@@ -17,18 +17,6 @@ public class GF {
     this.number = number;
   }
 
-  public GF(int number) throws GFException {
-    this((long) number);
-  }
-
-  public GF(short number) throws GFException {
-    this((long) number);
-  }
-
-  public GF(byte number) throws GFException {
-    this((long) number);
-  }
-
   public GF add(GF other) {
     this.number = (this.number + other.number) % MAX_VALUE;
 
