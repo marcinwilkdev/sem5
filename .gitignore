@@ -24,3 +24,5 @@ test
 target
 __pycache__/
 .env/
+build/
+.cache/
