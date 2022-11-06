@@ -22,3 +22,5 @@ main
 test
 !test/
 target
+__pycache__/
+.env/
