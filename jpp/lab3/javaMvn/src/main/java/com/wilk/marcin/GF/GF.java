@@ -18,15 +18,15 @@ public class GF {
   }
 
   public GF(int number) throws GFException {
-    this((long)number);
+    this((long) number);
   }
 
   public GF(short number) throws GFException {
-    this((long)number);
+    this((long) number);
   }
 
   public GF(byte number) throws GFException {
-    this((long)number);
+    this((long) number);
   }
 
   public GF add(GF other) {
@@ -63,6 +63,33 @@ public class GF {
 
   public long toLong() {
     return this.number;
+  }
+  
+  public boolean greaterThan(GF other) {
+    return this.number > other.number;
+  }
+
+  public boolean lessThan(GF other) {
+    return this.number < other.number;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+
+    if (obj == null) {
+      return false;
+    }
+
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+
+    GF other = (GF)obj;
+
+    return this.number == other.number;
   }
 
   @Override
