@@ -18,5 +18,7 @@ b__*
 *.deps
 *.yy.c
 main
+!main/
 test
+!test/
 target
