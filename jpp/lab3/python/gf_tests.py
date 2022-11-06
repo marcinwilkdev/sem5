@@ -30,7 +30,7 @@ def GFAdditionTest():
         gf1 = GF(50)
         gf2 = GF(50)
 
-        gf1 += gf2
+        gf1 = gf1 + gf2
 
         assert gf1 == GF(100)
 
@@ -47,7 +47,7 @@ def GFAdditionTest():
 
         gf1 += gf2 + gf3
 
-        assert gf1 == 10
+        assert gf1 == GF(10)
     except GFException:
         assert False
 

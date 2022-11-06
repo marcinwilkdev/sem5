@@ -44,7 +44,7 @@ class GF:
     def __lt__(self, other):
         return self.number < other.number
 
-    def __equals__(self, other):
+    def __eq__(self, other):
         return self.number == other.number
 
     def __str__(self) -> str:
