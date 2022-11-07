@@ -7,7 +7,7 @@
 
 %%
 
-["][^"\n]*["]                        printf("%s", yytext);
+["]("\\"[ \t]*"\n"|[^"\n])*["]       printf("%s", yytext);
 ['][^'\n]*[']                        printf("%s", yytext);
 ["]{3}(\"[^"]|\"\"[^"]|[^"])*["]{3}  printf("%s", yytext);
 
