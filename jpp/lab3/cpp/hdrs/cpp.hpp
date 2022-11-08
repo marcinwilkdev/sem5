@@ -6,13 +6,15 @@
 
 namespace cpp {
 
+long gcd(long a, long b, long &x, long &y);
+
 class GFException : std::exception {};
 
 class GFNegativeException : GFException {};
 
 class GFTooBigException : GFException {};
 
-class GFDivisionByZeroException : GFException {};
+class GFInverseOfZeroException : GFException {};
 
 class GF {
 private:
@@ -22,12 +24,16 @@ private:
 public:
   GF(const long number);
 
+  GF inverse() const;
+
   GF operator+(const GF &gf);
   GF operator-(const GF &gf);
   GF operator*(const GF &gf);
   GF operator/(const GF &gf);
   bool operator<(const GF &gf);
   bool operator>(const GF &gf);
+  GF operator^(const GF &gf);
+  // a^x = a^y mod p (p prime) x = y mod phi(p) (phi(p) == p-1)
 
   operator long();
 

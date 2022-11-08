@@ -7,6 +7,8 @@ int main(void) {
 
   std::cout << cpp::GF(100) << '\n';
   std::cin >> gf;
+  
+  std::cout << gf.inverse();
 
   return EXIT_SUCCESS;
 }

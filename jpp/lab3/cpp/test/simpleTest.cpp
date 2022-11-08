@@ -104,7 +104,7 @@ TEST_CASE("GF Division test") {
 
   CHECK(gf1 == cpp::GF(11));
 
-  CHECK_THROWS_AS((gf1 / cpp::GF(0)), cpp::GFDivisionByZeroException);
+  CHECK_THROWS_AS((gf1 / cpp::GF(0)), cpp::GFInverseOfZeroException);
 
   CHECK(gf1 < cpp::GF(100));
   CHECK(gf1 > cpp::GF(0));
