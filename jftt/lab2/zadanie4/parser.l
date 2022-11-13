@@ -157,7 +157,7 @@ void getNewLine(void)
   {
     fprintf(stderr, "Błąd: za mała liczba operatorów");
   }
-  else if (!errorState)
+  else if (!errorState && stackLen > 0)
   {
     printf("\r%d", stack[0]);
   }
