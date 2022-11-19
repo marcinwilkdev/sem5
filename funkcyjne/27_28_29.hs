@@ -2,8 +2,7 @@ mymap :: (a -> b) -> [a] -> [b]
 mymap f [] = []
 mymap f (x : xs) = f x : mymap f xs
 
-mysum [] = 0
-mysum (x : xs) = x + mysum xs
+mysum arr = map (\n -> sum $ take n arr) [1 .. length arr]
 
 myproduct [] = 1
 myproduct (x : xs) = x * myproduct xs
