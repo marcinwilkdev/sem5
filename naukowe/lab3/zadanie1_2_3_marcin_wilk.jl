@@ -5,15 +5,13 @@ f2(x) = (x + 1.0) * (x - 3.0)
 f3(x) = (x - 8.0) * (x + 3.0) * (x - 1.0)
 
 function mbisekcji(f, a::Float64, b::Float64, delta::Float64, epsilon::Float64)
-    xs = empty([0.0])
-    ys = empty([0.0])
+    u = f(a)
+    v = f(b)
 
-    if f(a) * f(b) > 0.0
+    if u * v > 0.0
         return (0, 0, 0, 1)
     end
 
-    u = f(a)
-    v = f(b)
     e = b - a
 
     iterations = 0
@@ -22,9 +20,6 @@ function mbisekcji(f, a::Float64, b::Float64, delta::Float64, epsilon::Float64)
         e = e / 2.0
         c = a + e
         w = f(c)
-
-        push!(xs, c)
-        push!(ys, w)
 
         if abs(e) <= delta || abs(w) <= epsilon
             return (c, w, iterations, 0)
