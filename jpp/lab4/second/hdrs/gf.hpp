@@ -4,20 +4,13 @@
 #include <exception>
 #include <iostream>
 
-namespace cpp {
+namespace gf {
 
 bool isPrime(long number);
-
 long gcd(long a, long b, long &x, long &y);
 
 class GFException : std::exception {};
-
-class GFNegativeException : GFException {};
-
-class GFTooBigException : GFException {};
-
 class GFInverseOfZeroException : GFException {};
-
 class GFNotPrimeException : GFException {};
 
 template <long P>
@@ -27,23 +20,20 @@ class GF {
   long number{};
 
  public:
-  GF(const long number);
+  GF(long number);
   GF();
 
   GF inverse() const;
 
-  GF operator+(const GF &gf);
-  GF operator-(const GF &gf);
-  GF operator*(const GF &gf);
-  GF operator/(const GF &gf);
-  GF operator^(const GF &gf);
-  bool operator!=(const GF &gf);
-  bool operator<(const GF &gf);
-  bool operator>(const GF &gf);
+  GF operator+(const GF &gf) const;
+  GF operator-(const GF &gf) const;
+  GF operator*(const GF &gf) const;
+  GF operator/(const GF &gf) const;
+  GF operator^(const GF &gf) const;
+  bool operator<(const GF &gf) const;
+  bool operator>(const GF &gf) const;
 
   operator long();
-
-  GF &operator=(const GF &gf);
 
   friend bool operator==(const GF<P> &gf1, const GF<P> &gf2) {
     return gf1.number == gf2.number;
@@ -81,20 +71,16 @@ GF<P> GF<P>::inverse() const {
 }
 
 template <long P>
-GF<P>::GF(const long number) {
-  if (!cpp::isPrime(P)) {
+GF<P>::GF(long number) {
+  if (!gf::isPrime(P)) {
     throw GFNotPrimeException();
   }
 
-  if (number < 0) {
-    throw GFNegativeException();
+  while (number < 0) {
+    number += GF::MAX_VALUE;
   }
 
-  if (number >= MAX_VALUE) {
-    throw GFTooBigException();
-  }
-
-  this->number = number;
+  this->number = number % GF::MAX_VALUE;
 }
 
 template <long P>
@@ -103,14 +89,14 @@ GF<P>::GF() {
 }
 
 template <long P>
-GF<P> GF<P>::operator+(const GF<P> &gf) {
+GF<P> GF<P>::operator+(const GF<P> &gf) const {
   const long newValue = (number + gf.number) % GF<P>::MAX_VALUE;
 
   return {newValue};
 }
 
 template <long P>
-GF<P> GF<P>::operator-(const GF<P> &gf) {
+GF<P> GF<P>::operator-(const GF<P> &gf) const {
   long newValue = (number - gf.number) % GF<P>::MAX_VALUE;
 
   if (newValue < 0) {
@@ -121,21 +107,21 @@ GF<P> GF<P>::operator-(const GF<P> &gf) {
 }
 
 template <long P>
-GF<P> GF<P>::operator*(const GF<P> &gf) {
+GF<P> GF<P>::operator*(const GF<P> &gf) const {
   const long newValue = (number * gf.number) % GF<P>::MAX_VALUE;
 
   return {newValue};
 }
 
 template <long P>
-GF<P> GF<P>::operator/(const GF<P> &gf) {
+GF<P> GF<P>::operator/(const GF<P> &gf) const {
   const long newValue = (number * gf.inverse().number) % GF<P>::MAX_VALUE;
 
   return {newValue};
 }
 
 template <long P>
-GF<P> GF<P>::operator^(const GF<P> &gf) {
+GF<P> GF<P>::operator^(const GF<P> &gf) const {
   long number = this->number;
   long result = 1;
 
@@ -154,17 +140,12 @@ GF<P> GF<P>::operator^(const GF<P> &gf) {
 }
 
 template <long P>
-bool GF<P>::operator!=(const GF<P> &gf) {
-  return this->number != gf.number;
-}
-
-template <long P>
-bool GF<P>::operator<(const GF<P> &gf) {
+bool GF<P>::operator<(const GF<P> &gf) const {
   return number < gf.number;
 }
 
 template <long P>
-bool GF<P>::operator>(const GF<P> &gf) {
+bool GF<P>::operator>(const GF<P> &gf) const {
   return number > gf.number;
 }
 
@@ -173,13 +154,6 @@ GF<P>::operator long() {
   return number;
 };
 
-template <long P>
-GF<P> &GF<P>::operator=(const GF<P> &gf) {
-  number = gf.number;
-
-  return *this;
-}
-
-}  // namespace cpp
+}  // namespace gf
 
 #endif

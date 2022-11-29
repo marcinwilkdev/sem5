@@ -5,7 +5,10 @@
 #include <iostream>
 #include <vector>
 
-namespace second {
+namespace polynomial {
+
+class PolynomialException : std::exception {};
+class NoCoeffException : PolynomialException {};
 
 template <typename T>
 class Polynomial {
@@ -27,6 +30,8 @@ class Polynomial {
   Polynomial operator*(const Polynomial &polynomial) const;
   Polynomial operator/(const Polynomial &polynomial) const;
   Polynomial operator%(const Polynomial &polynomial) const;
+  T &operator[](int coeffIdx);
+  T operator()(const T &x) const;
   bool operator<(const Polynomial &polynomial) const;
   bool operator>(const Polynomial &polynomial) const;
 
@@ -36,7 +41,8 @@ class Polynomial {
     }
 
     for (int coeffIdx{0}; coeffIdx < pol1.coefficients.size(); ++coeffIdx) {
-      if (pol1.coefficients[coeffIdx] != pol2.coefficients[coeffIdx]) {
+      if (pol1.coefficients[coeffIdx] < pol2.coefficients[coeffIdx] ||
+          pol1.coefficients[coeffIdx] > pol2.coefficients[coeffIdx]) {
         return false;
       }
     }
@@ -45,20 +51,15 @@ class Polynomial {
   }
 
   friend std::ostream &operator<<(std::ostream &out,
-                                  const Polynomial<T> &polynomial) {
-    std::string output{""};
-
+                                  Polynomial<T> &polynomial) {
     for (int coeffIdx{static_cast<int>(polynomial.coefficients.size() - 1)};
          coeffIdx >= 0; --coeffIdx) {
       if (coeffIdx == 0) {
-        output += std::to_string(polynomial.coefficients[coeffIdx]);
+        out << polynomial.coefficients[coeffIdx];
       } else {
-        output += std::to_string(polynomial.coefficients[coeffIdx]) + "x^" +
-                  std::to_string(coeffIdx) + " + ";
+        out << polynomial.coefficients[coeffIdx] << "x^" << coeffIdx << " + ";
       }
     }
-
-    out << output;
 
     return out;
   }
@@ -154,7 +155,8 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &polynomial) const {
     for (int otherCoeffIdx{0};
          otherCoeffIdx < static_cast<int>(polynomial.coefficients.size());
          ++otherCoeffIdx) {
-      newCoefficients[coeffIdx + otherCoeffIdx] +=
+      newCoefficients[coeffIdx + otherCoeffIdx] =
+          newCoefficients[coeffIdx + otherCoeffIdx] +
           this->coefficients[coeffIdx] * polynomial.coefficients[otherCoeffIdx];
     }
   }
@@ -169,8 +171,10 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &polynomial) const {
 template <typename T>
 Polynomial<T> Polynomial<T>::operator/(const Polynomial<T> &polynomial) const {
   Polynomial<T> remainder{this->coefficients};
-  Polynomial<T> quotient{std::vector<T>(this->coefficients.size() -
-                                        polynomial.coefficients.size())};
+  Polynomial<T> quotient{std::vector<T>(
+      this->coefficients.size() > polynomial.coefficients.size()
+          ? this->coefficients.size() - polynomial.coefficients.size()
+          : 0)};
 
   while (remainder.coefficients.size() >= polynomial.coefficients.size()) {
     T coeff{remainder.coefficients.back() / polynomial.coefficients.back()};
@@ -197,8 +201,10 @@ Polynomial<T> Polynomial<T>::operator/(const Polynomial<T> &polynomial) const {
 template <typename T>
 Polynomial<T> Polynomial<T>::operator%(const Polynomial<T> &polynomial) const {
   Polynomial<T> remainder{this->coefficients};
-  Polynomial<T> quotient{std::vector<T>(this->coefficients.size() -
-                                        polynomial.coefficients.size())};
+  Polynomial<T> quotient{std::vector<T>(
+      this->coefficients.size() > polynomial.coefficients.size()
+          ? this->coefficients.size() - polynomial.coefficients.size()
+          : 0)};
 
   while (remainder.coefficients.size() >= polynomial.coefficients.size()) {
     T coeff{remainder.coefficients.back() / polynomial.coefficients.back()};
@@ -263,10 +269,33 @@ bool Polynomial<T>::operator>(const Polynomial<T> &polynomial) const {
 }
 
 template <typename T>
+T &Polynomial<T>::operator[](const int coeffIdx) {
+  if (coeffIdx < 0 || coeffIdx >= static_cast<int>(this->coefficients.size())) {
+    throw NoCoeffException();
+  }
+
+  return this->coefficients[coeffIdx];
+}
+
+template <typename T>
+T Polynomial<T>::operator()(const T &value) const {
+  T result = T();
+
+  for (std::size_t coeffIdx{0}; coeffIdx < this->coefficients.size();
+       ++coeffIdx) {
+    result = result + this->coefficients[coeffIdx] * (value ^ coeffIdx);
+  }
+
+  return result;
+}
+
+template <typename T>
 void Polynomial<T>::normalize() {
   for (int coeffIdx{static_cast<int>(this->coefficients.size() - 1)};
        coeffIdx >= 0; --coeffIdx) {
-    if (this->coefficients[coeffIdx] != 0) {
+    T neutralElement = T();
+
+    if (this->coefficients[coeffIdx] > neutralElement) {
       break;
     }
 
@@ -274,6 +303,6 @@ void Polynomial<T>::normalize() {
   }
 }
 
-}  // namespace second
+}  // namespace polynomial
 
 #endif

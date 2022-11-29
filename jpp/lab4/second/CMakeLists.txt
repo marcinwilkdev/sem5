@@ -18,16 +18,22 @@ cppcheck()
 
 find_package(Catch2 3 REQUIRED)
 
-add_library(second srcs/second.cpp hdrs/second.hpp)
-target_include_directories(second PRIVATE hdrs)
+add_library(polynomial srcs/polynomial.cpp hdrs/polynomial.hpp)
+target_include_directories(polynomial PRIVATE hdrs)
+
+add_library(gf srcs/gf.cpp hdrs/gf.hpp)
+target_include_directories(gf PRIVATE hdrs)
+
+add_library(doubleWrapper srcs/doubleWrapper.cpp hdrs/doubleWrapper.hpp)
+target_include_directories(doubleWrapper PRIVATE hdrs)
 
 add_executable(main srcs/main.cpp)
 target_include_directories(main PRIVATE hdrs)
-target_link_libraries(main second)
+target_link_libraries(main polynomial gf doubleWrapper)
 
 add_executable(simpleTest test/simpleTest.cpp)
 target_include_directories(simpleTest PRIVATE hdrs)
-target_link_libraries(simpleTest second Catch2::Catch2WithMain)
+target_link_libraries(simpleTest polynomial gf doubleWrapper Catch2::Catch2WithMain)
 
-target_code_coverage(second AUTO)
+target_code_coverage(polynomial AUTO)
 target_code_coverage(simpleTest AUTO)
