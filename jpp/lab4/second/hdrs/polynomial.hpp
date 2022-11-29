@@ -41,8 +41,7 @@ class Polynomial {
     }
 
     for (int coeffIdx{0}; coeffIdx < pol1.coefficients.size(); ++coeffIdx) {
-      if (pol1.coefficients[coeffIdx] < pol2.coefficients[coeffIdx] ||
-          pol1.coefficients[coeffIdx] > pol2.coefficients[coeffIdx]) {
+      if (pol1.coefficients[coeffIdx] == pol2.coefficients[coeffIdx]) {
         return false;
       }
     }
@@ -52,12 +51,24 @@ class Polynomial {
 
   friend std::ostream &operator<<(std::ostream &out,
                                   Polynomial<T> &polynomial) {
-    for (int coeffIdx{static_cast<int>(polynomial.coefficients.size() - 1)};
-         coeffIdx >= 0; --coeffIdx) {
-      if (coeffIdx == 0) {
-        out << polynomial.coefficients[coeffIdx];
-      } else {
-        out << polynomial.coefficients[coeffIdx] << "x^" << coeffIdx << " + ";
+    if (polynomial.coefficients.size() == 0) {
+      out << "0";
+    } else {
+      T neutralElement = T();
+
+      for (int coeffIdx{static_cast<int>(polynomial.coefficients.size() - 1)};
+           coeffIdx >= 0; --coeffIdx) {
+        if (!(polynomial.coefficients[coeffIdx] == neutralElement)) {
+          if (coeffIdx < static_cast<int>(polynomial.coefficients.size() - 1)) {
+            out << " + ";
+          }
+
+          out << polynomial.coefficients[coeffIdx];
+
+          if (coeffIdx > 0) {
+            out << "x^" << coeffIdx;
+          }
+        }
       }
     }
 
