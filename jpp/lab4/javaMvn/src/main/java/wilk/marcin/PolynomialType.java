@@ -1,7 +1,11 @@
 package wilk.marcin;
 
 public interface PolynomialType<P> {
-  PolynomialType<P> neutral();
-  PolynomialType<P> value();
-  boolean gt(PolynomialType<P> other);
+  P neutral();
+
+  P value();
+
+  P add(P p);
+
+  boolean gt(P other);
 }

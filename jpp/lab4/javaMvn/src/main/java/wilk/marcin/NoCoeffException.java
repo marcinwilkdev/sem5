@@ -1,3 +1,3 @@
 package wilk.marcin;
 
-public class NoCoeffException extends PolynomialException {};
+public class NoCoeffException extends PolynomialException {}

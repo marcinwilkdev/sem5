@@ -2,70 +2,113 @@ package wilk.marcin;
 
 import java.util.*;
 
-public class Polynomial<P, T extends PolynomialType<P>> {
-  private ArrayList<T> coefficients;
+public class Polynomial<P extends PolynomialType<P>> {
+  private ArrayList<P> coefficients;
 
-  public Polynomial(final ArrayList<T> coefficients) {
+  public Polynomial(final ArrayList<P> coefficients) {
     this.coefficients = coefficients;
     this.normalize();
   }
 
-  public Polynomial(final T[] coefficients) {
-    this.coefficients = new ArrayList<T>(Arrays.asList(coefficients));
+  public Polynomial(final P[] coefficients) {
+    this.coefficients = new ArrayList<>(Arrays.asList(coefficients));
     this.normalize();
   }
 
-  // public Polynomial<P, T> add(Polynomial<P, T> other) {
-  // final int maxDegree = this.coefficients.size() > other.coefficients.size() ? this.coefficients.size() : other.coefficients.size();
+  public Polynomial<P> add(Polynomial<P> other) {
+    final int maxDegree =
+        this.coefficients.size() > other.coefficients.size()
+            ? this.coefficients.size()
+            : other.coefficients.size();
 
-  // ArrayList<T> newCoefficients = new ArrayList<T>();
+    if (maxDegree == 0) {
+      return new Polynomial<P>(new ArrayList<>());
+    }
 
+    P neutralElement =
+        this.coefficients.size() > 0
+            ? this.coefficients.get(0).neutral()
+            : other.coefficients.get(0).neutral();
 
-  // for (int i = 0; i < 10; i++) {
-  //   newCoefficients.add(0);
-  // }
+    ArrayList<P> newCoefficients = new ArrayList<>();
 
-  // for (std::size_t coeffIdx{0}; coeffIdx < maxDegree; ++coeffIdx) {
-  //   if (coeffIdx < this->coefficients.size() &&
-  //       coeffIdx < polynomial.coefficients.size()) {
-  //     newCoefficients[coeffIdx] =
-  //         this->coefficients[coeffIdx] + polynomial.coefficients[coeffIdx];
-  //   } else if (coeffIdx < this->coefficients.size()) {
-  //     newCoefficients[coeffIdx] = this->coefficients[coeffIdx];
-  //   } else {
-  //     newCoefficients[coeffIdx] = polynomial.coefficients[coeffIdx];
-  //   }
-  // }
+    for (int i = 0; i < maxDegree; i++) {
+      newCoefficients.add(neutralElement);
+    }
 
-  // Polynomial<T> result{newCoefficients};
+    for (int coeffIdx = 0; coeffIdx < maxDegree; coeffIdx++) {
+      if (coeffIdx < this.coefficients.size() && coeffIdx < other.coefficients.size()) {
+        P firstElement = this.coefficients.get(coeffIdx);
+        P secondElement = other.coefficients.get(coeffIdx);
 
-  // result.normalize();
+        newCoefficients.set(coeffIdx, firstElement.add(secondElement));
+      } else if (coeffIdx < this.coefficients.size()) {
+        newCoefficients.set(coeffIdx, this.coefficients.get(coeffIdx));
+      } else {
+        newCoefficients.set(coeffIdx, other.coefficients.get(coeffIdx));
+      }
+    }
 
-  // return result;
-  // }
+    Polynomial<P> result = new Polynomial<>(newCoefficients);
+
+    result.normalize();
+
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof Polynomial)) {
+      return false;
+    }
+
+    return this.coefficients.equals(((Polynomial<P>) obj).coefficients);
+  }
+
+  @Override
+  public String toString() {
+    if (this.coefficients.size() == 0) {
+      return "0";
+    }
+
+    StringBuilder sb = new StringBuilder();
+
+    for (int coeffIdx = this.coefficients.size() - 1; coeffIdx >= 0; coeffIdx--) {
+      P coeff = this.coefficients.get(coeffIdx);
+
+      if (!coeff.equals(coeff.neutral())) {
+        if (coeffIdx < this.coefficients.size() - 1) {
+          sb.append(" + ");
+        }
+
+        sb.append(coeff.toString());
+
+        if (coeffIdx > 0) {
+          sb.append("x^");
+          sb.append(coeffIdx);
+        }
+      }
+    }
+
+    return sb.toString();
+  }
 
   private void normalize() {
-    for (int coeffIdx = this.coefficients.size() - 1; coeffIdx >= 0; --coeffIdx) {
-      final PolynomialType<P> neutralElement = this.coefficients.get(0).neutral();
+    if (this.coefficients.size() == 0) {
+      return;
+    }
 
-      if (this.coefficients.get(coeffIdx).gt(neutralElement)) {
+    for (int coeffIdx = this.coefficients.size() - 1; coeffIdx >= 0; --coeffIdx) {
+      final P neutralElement = this.coefficients.get(0).neutral();
+
+      if (!this.coefficients.get(coeffIdx).equals(neutralElement)) {
         break;
       }
 
-      this.coefficients.remove(this.coefficients.size() - 1);
+      this.coefficients.remove(coeffIdx);
     }
   }
 }
-
-//   Polynomial operator+(const Polynomial &polynomial) const;
-//   Polynomial operator-(const Polynomial &polynomial) const;
-//   Polynomial operator*(const Polynomial &polynomial) const;
-//   Polynomial operator/(const Polynomial &polynomial) const;
-//   Polynomial operator%(const Polynomial &polynomial) const;
-//   T &operator[](int coeffIdx);
-//   T operator()(const T &x) const;
-//   bool operator<(const Polynomial &polynomial) const;
-//   bool operator>(const Polynomial &polynomial) const;
 
 //   friend bool operator==(const Polynomial<T> &pol1, const Polynomial<T> &pol2) {
 //     if (pol1.coefficients.size() != pol2.coefficients.size()) {
@@ -105,17 +148,6 @@ public class Polynomial<P, T extends PolynomialType<P>> {
 //     }
 
 //     return out;
-//   }
-
-//   friend std::istream &operator>>(std::istream &in, Polynomial<T> &polynomial) {
-//     std::vector<T> coefficients;
-
-//     for (int coeffIdx{polynomial.coefficients.size() - 1}; coeffIdx >= 0;
-//          --coeffIdx) {
-//       in >> polynomial.coefficients[coeffIdx];
-//     }
-
-//     return in;
 //   }
 
 //  private:
