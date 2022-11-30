@@ -246,7 +246,7 @@ bool Polynomial<T>::operator<(const Polynomial<T> &polynomial) const {
   } else if (this->coefficients.size() > polynomial.coefficients.size()) {
     return false;
   } else {
-    for (int coeffIdx{0}; coeffIdx < this->coefficients.size(); ++coeffIdx) {
+    for (int coeffIdx{this->coefficients.size()}; coeffIdx >= 0; --coeffIdx) {
       if (this->coefficients[coeffIdx] < polynomial.coefficients[coeffIdx]) {
         return true;
       } else if (this->coefficients[coeffIdx] >
@@ -266,7 +266,7 @@ bool Polynomial<T>::operator>(const Polynomial<T> &polynomial) const {
   } else if (this->coefficients.size() < polynomial.coefficients.size()) {
     return false;
   } else {
-    for (int coeffIdx{0}; coeffIdx < this->coefficients.size(); ++coeffIdx) {
+    for (int coeffIdx{this->coefficients.size()}; coeffIdx >= 0; --coeffIdx) {
       if (this->coefficients[coeffIdx] > polynomial.coefficients[coeffIdx]) {
         return true;
       } else if (this->coefficients[coeffIdx] <
@@ -306,7 +306,7 @@ void Polynomial<T>::normalize() {
        coeffIdx >= 0; --coeffIdx) {
     T neutralElement = T();
 
-    if (this->coefficients[coeffIdx] > neutralElement) {
+    if (!(this->coefficients[coeffIdx] == neutralElement)) {
       break;
     }
 

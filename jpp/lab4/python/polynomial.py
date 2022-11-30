@@ -1,0 +1,336 @@
+from abc import ABC, abstractmethod
+from typing import List, TypeVar, Generic
+
+
+class PolynomialType(ABC):
+    @abstractmethod
+    def neutral(self) -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __add__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __sub__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __mul__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __div__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __pow__(self, other: int) -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __gt__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __lt__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __str__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+    @abstractmethod
+    def __eq__(self, other: "PolynomialType") -> "PolynomialType":
+        pass
+
+
+class DoubleWrapper(PolynomialType):
+    value: float
+
+    def __init__(self, number: float):
+        self.value = number
+
+    def neutral(self) -> "DoubleWrapper":
+        return DoubleWrapper(0.0)
+
+    def __add__(self, other: "DoubleWrapper") -> "DoubleWrapper":
+        return DoubleWrapper(self.value + other.value)
+
+    def __sub__(self, other: "DoubleWrapper") -> "DoubleWrapper":
+        return DoubleWrapper(self.value * other.value)
+
+    def __mul__(self, other: "DoubleWrapper") -> "DoubleWrapper":
+        return DoubleWrapper(self.value - other.value)
+
+    def __div__(self, other: "DoubleWrapper") -> "DoubleWrapper":
+        return DoubleWrapper(self.value / other.value)
+
+    def __pow__(self, other: int) -> "DoubleWrapper":
+        return DoubleWrapper(pow(self.value, other))
+
+    def __gt__(self, other: "DoubleWrapper") -> bool:
+        return self.value > other.value
+
+    def __lt__(self, other: "DoubleWrapper") -> bool:
+        return self.value < other.value
+
+    def __eq__(self, other: "DoubleWrapper") -> bool:
+        return self.value == other.value
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+
+T = TypeVar("T", bound=PolynomialType)
+
+
+class Polynomial(Generic[T]):
+    coefficients: List[T]
+
+    def __init__(self, coefficients: List[T]):
+        self.coefficients = coefficients[:]
+
+    def normalize(self):
+        if len(self.coefficients) == 0:
+            return
+
+        neutralElement = self.coefficients[0].neutral()
+
+        for coeffIdx in reversed(range(len(self.coefficients))):
+            if not (self.coefficients[coeffIdx] == neutralElement):
+                break
+
+            self.coefficients.pop()
+
+    def __eq__(self, other: "Polynomial") -> bool:
+        return self.coefficients == other.coefficients
+
+    def __add__(self, other: "Polynomial") -> "Polynomial":
+        maxLen = max(len(self.coefficients), len(other.coefficients))
+
+        newCoefficients = []
+
+        for coeffIdx in range(maxLen):
+            if coeffIdx < len(self.coefficients) and coeffIdx < len(other.coefficients):
+                newCoefficients.append(
+                    self.coefficients[coeffIdx] + other.coefficients[coeffIdx]
+                )
+            elif coeffIdx < len(self.coefficients):
+                newCoefficients.append(self.coefficients[coeffIdx])
+            else:
+                newCoefficients.append(other.coefficients[coeffIdx])
+
+        result = Polynomial(newCoefficients)
+
+        result.normalize()
+
+        return result
+
+    def __sub__(self, other: "Polynomial") -> "Polynomial":
+        if len(self.coefficients) == 0 and len(other.coefficients) == 0:
+            return Polynomial([])
+
+        maxLen = max(len(self.coefficients), len(other.coefficients))
+
+        neutralElement = (
+            self.coefficients[0]
+            if len(self.coefficients) > 0
+            else other.coefficients[0]
+        ).neutral()
+
+        newCoefficients = [neutralElement] * maxLen
+
+        for coeffIdx in range(maxLen):
+            if coeffIdx < len(self.coefficients) and coeffIdx < len(other.coefficients):
+                newCoefficients[coeffIdx] = (
+                    self.coefficients[coeffIdx] - other.coefficients[coeffIdx]
+                )
+            elif coeffIdx < len(self.coefficients):
+                newCoefficients[coeffIdx] = self.coefficients[coeffIdx]
+            else:
+                newCoefficients[coeffIdx] = (
+                    newCoefficients[coeffIdx] - other.coefficients[coeffIdx]
+                )
+
+        result = Polynomial(newCoefficients)
+
+        result.normalize()
+
+        return result
+
+    def __truediv__(self, other: "Polynomial") -> "Polynomial":
+        if len(self.coefficients) == 0 and len(other.coefficients) == 0:
+            return Polynomial([])
+
+        neutralElement = (
+            self.coefficients[0]
+            if len(self.coefficients) > 0
+            else other.coefficients[0]
+        ).neutral()
+
+        quotientLen = (
+            len(self.coefficients) - len(other.coefficients)
+            if len(self.coefficients) > len(other.coefficients)
+            else 0
+        )
+
+        remainder = Polynomial(self.coefficients)
+        quotient = Polynomial([neutralElement] * quotientLen)
+
+        while len(remainder.coefficients) >= len(other.coefficients):
+            coeff = remainder.coefficients[-1] / other.coefficients[-1]
+
+            newQuotientCoefficients = [neutralElement] * (
+                len(remainder.coefficients) - len(other.coefficients) + 1
+            )
+
+            newQuotientCoefficients[-1] = coeff
+
+            newQuotient = Polynomial(newQuotientCoefficients)
+
+            quotient = quotient + newQuotient
+
+            remainder = remainder - (newQuotient * other)
+
+            remainder.normalize()
+
+        quotient.normalize()
+
+        return quotient
+
+    def __mod__(self, other: "Polynomial") -> "Polynomial":
+        if len(self.coefficients) == 0 and len(other.coefficients) == 0:
+            return Polynomial([])
+
+        neutralElement = (
+            self.coefficients[0]
+            if len(self.coefficients) > 0
+            else other.coefficients[0]
+        ).neutral()
+
+        quotientLen = (
+            len(self.coefficients) - len(other.coefficients)
+            if len(self.coefficients) > len(other.coefficients)
+            else 0
+        )
+
+        remainder = Polynomial(self.coefficients)
+        quotient = Polynomial([neutralElement] * quotientLen)
+
+        while len(remainder.coefficients) >= len(other.coefficients):
+            coeff = remainder.coefficients[-1] / other.coefficients[-1]
+
+            newQuotientCoefficients = [neutralElement] * (
+                len(remainder.coefficients) - len(other.coefficients) + 1
+            )
+
+            newQuotientCoefficients[-1] = coeff
+
+            newQuotient = Polynomial(newQuotientCoefficients)
+
+            quotient = quotient + newQuotient
+
+            remainder = remainder - (newQuotient * other)
+
+            remainder.normalize()
+
+        remainder.normalize()
+
+        return remainder
+
+    def __mul__(self, other: "Polynomial") -> "Polynomial":
+        resultDegree = len(self.coefficients) + len(other.coefficients) - 1
+
+        if resultDegree < 0:
+            resultDegree = 0
+
+        neutralElement = (
+            self.coefficients[0]
+            if len(self.coefficients) > 0
+            else other.coefficients[0]
+        ).neutral()
+
+        newCoefficients = [neutralElement] * resultDegree
+
+        for selfCoeffIdx in range(len(self.coefficients)):
+            for otherCoeffIdx in range(len(other.coefficients)):
+                newCoefficients[selfCoeffIdx + otherCoeffIdx] = (
+                    newCoefficients[selfCoeffIdx + otherCoeffIdx]
+                    + self.coefficients[selfCoeffIdx]
+                    * other.coefficients[otherCoeffIdx]
+                )
+
+        result = Polynomial(newCoefficients)
+
+        result.normalize()
+
+        return result
+
+    def __lt__(self, other: "Polynomial") -> bool:
+        if len(self.coefficients) < len(other.coefficients):
+            return True
+        elif len(self.coefficients) > len(other.coefficients):
+            return False
+        else:
+            for coeffIdx in reversed(range(len(self.coefficients))):
+                if self.coefficients[coeffIdx] < other.coefficients[coeffIdx]:
+                    return True
+                elif self.coefficients[coeffIdx] > other.coefficients[coeffIdx]:
+                    return False
+
+            return False
+
+    def __gt__(self, other: "Polynomial") -> bool:
+        if len(self.coefficients) > len(other.coefficients):
+            return True
+        elif len(self.coefficients) < len(other.coefficients):
+            return False
+        else:
+            for coeffIdx in reversed(range(len(self.coefficients))):
+                if self.coefficients[coeffIdx] > other.coefficients[coeffIdx]:
+                    return True
+                elif self.coefficients[coeffIdx] < other.coefficients[coeffIdx]:
+                    return False
+
+            return False
+
+    def __getitem__(self, idx: int) -> T:
+        if idx < 0 or idx >= len(self.coefficients):
+            raise NoCoeffException
+        else:
+            return self.coefficients[idx]
+
+    def __call__(self, x: T) -> "PolynomialType":
+        result = self.coefficients[0].neutral()
+
+        for coeffIdx in range(len(self.coefficients)):
+            result = result + self.coefficients[coeffIdx] * (x**coeffIdx)
+
+        return result
+
+    def __str__(self) -> str:
+        if len(self.coefficients) == 0:
+            return "0"
+        else:
+            neutralElement = self.coefficients[0].neutral()
+            output = ""
+
+            for coeffIdx in reversed(range(len(self.coefficients))):
+                if not (self.coefficients[coeffIdx] == neutralElement):
+                    if coeffIdx < len(self.coefficients) - 1:
+                        output += " + "
+
+                    output += str(self.coefficients[coeffIdx])
+
+                    if coeffIdx > 0:
+                        output += "x^{}".format(coeffIdx)
+
+            return output
+
+
+class PolynomialException(Exception):
+    pass
+
+
+class NoCoeffException(PolynomialException):
+    pass
