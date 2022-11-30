@@ -1,13 +1,18 @@
 import polynomial
+import doubleWrapper
 
 
-DW = polynomial.DoubleWrapper
+DW = doubleWrapper.DoubleWrapper
 
 
 def main():
-    myPol = polynomial.Polynomial([DW(-1.0), DW(2.0), DW(0.0), DW(1.0)])
+    firstPolynomial = polynomial.Polynomial([DW(-1.0), DW(2.0), DW(0.0), DW(1.0)])
+    secondPolynomial = polynomial.Polynomial([DW(-1.0), DW(1.0)])
 
-    print(str(myPol))
+    print(firstPolynomial + secondPolynomial - secondPolynomial)
+    print(firstPolynomial * secondPolynomial / secondPolynomial)
+    print(firstPolynomial[0])
+    print(firstPolynomial(DW(2.0)))
 
 
 if __name__ == "__main__":
