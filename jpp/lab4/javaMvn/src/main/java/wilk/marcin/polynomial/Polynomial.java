@@ -1,4 +1,4 @@
-package wilk.marcin;
+package wilk.marcin.polynomial;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,9 +28,7 @@ public class Polynomial<P extends PolynomialType<P>> {
     }
 
     P neutralElement =
-        this.coefficients.stream()
-            .findFirst()
-            .orElse(other.coefficients.stream().findFirst().get())
+        (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
     var thisIter =
@@ -58,14 +56,12 @@ public class Polynomial<P extends PolynomialType<P>> {
             ? this.coefficients.size()
             : other.coefficients.size();
 
-    if (maxDegree == 0) {
+    if (this.coefficients.size() == 0 && other.coefficients.size() == 0) {
       return new Polynomial<P>(new ArrayList<>());
     }
 
     P neutralElement =
-        this.coefficients.stream()
-            .findFirst()
-            .orElse(other.coefficients.stream().findFirst().get())
+        (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
     var thisIter =
@@ -95,9 +91,7 @@ public class Polynomial<P extends PolynomialType<P>> {
     }
 
     P neutralElement =
-        this.coefficients.stream()
-            .findFirst()
-            .orElse(other.coefficients.stream().findFirst().get())
+        (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
     ArrayList<P> resultCoefficients =
@@ -128,9 +122,7 @@ public class Polynomial<P extends PolynomialType<P>> {
     Polynomial<P> remainder = new Polynomial<>(this.coefficients);
 
     P neutralElement =
-        this.coefficients.stream()
-            .findFirst()
-            .orElse(other.coefficients.stream().findFirst().get())
+        (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
     final int quotientSize =
@@ -176,9 +168,7 @@ public class Polynomial<P extends PolynomialType<P>> {
     Polynomial<P> remainder = new Polynomial<>(this.coefficients);
 
     P neutralElement =
-        this.coefficients.stream()
-            .findFirst()
-            .orElse(other.coefficients.stream().findFirst().get())
+        (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
     final int quotientSize =
@@ -318,6 +308,10 @@ public class Polynomial<P extends PolynomialType<P>> {
       if (!this.coefficients.get(coeffIdx).equals(neutralElement)) {
         break;
       }
+
+      // System.out.println(neutralElement);
+      // System.out.println(this.coefficients.get(coeffIdx));
+      // System.out.println();
 
       this.coefficients.remove(coeffIdx);
     }

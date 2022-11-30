@@ -1,9 +1,7 @@
-package wilk.marcin;
+package wilk.marcin.polynomial;
 
 public interface PolynomialType<P> {
   P neutral();
-
-  P value();
 
   P add(P p);
 
@@ -13,7 +11,7 @@ public interface PolynomialType<P> {
 
   P div(P p);
 
-  P pow(int pow);
+  P pow(long pow);
 
   boolean gt(P other);
 

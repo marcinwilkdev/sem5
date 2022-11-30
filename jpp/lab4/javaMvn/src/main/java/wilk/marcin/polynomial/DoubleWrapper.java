@@ -1,4 +1,4 @@
-package wilk.marcin;
+package wilk.marcin.polynomial;
 
 public class DoubleWrapper implements PolynomialType<DoubleWrapper> {
   private double value;
@@ -10,11 +10,6 @@ public class DoubleWrapper implements PolynomialType<DoubleWrapper> {
   @Override
   public DoubleWrapper neutral() {
     return new DoubleWrapper(0.0);
-  }
-
-  @Override
-  public DoubleWrapper value() {
-    return this;
   }
 
   @Override
@@ -38,7 +33,7 @@ public class DoubleWrapper implements PolynomialType<DoubleWrapper> {
   }
 
   @Override
-  public DoubleWrapper pow(int p) {
+  public DoubleWrapper pow(long p) {
     return new DoubleWrapper(Math.pow(this.value, p));
   }
 
