@@ -23,8 +23,33 @@ public class DoubleWrapper implements PolynomialType<DoubleWrapper> {
   }
 
   @Override
+  public DoubleWrapper sub(DoubleWrapper p) {
+    return new DoubleWrapper(this.value - p.value);
+  }
+
+  @Override
+  public DoubleWrapper prod(DoubleWrapper p) {
+    return new DoubleWrapper(this.value * p.value);
+  }
+
+  @Override
+  public DoubleWrapper div(DoubleWrapper p) {
+    return new DoubleWrapper(this.value / p.value);
+  }
+
+  @Override
+  public DoubleWrapper pow(int p) {
+    return new DoubleWrapper(Math.pow(this.value, p));
+  }
+
+  @Override
   public boolean gt(DoubleWrapper other) {
     return this.value > other.value;
+  }
+
+  @Override
+  public boolean lt(DoubleWrapper other) {
+    return this.value < other.value;
   }
 
   @Override

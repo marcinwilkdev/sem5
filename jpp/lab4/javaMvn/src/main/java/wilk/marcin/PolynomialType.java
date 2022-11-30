@@ -7,5 +7,15 @@ public interface PolynomialType<P> {
 
   P add(P p);
 
+  P sub(P p);
+
+  P prod(P p);
+
+  P div(P p);
+
+  P pow(int pow);
+
   boolean gt(P other);
+
+  boolean lt(P other);
 }
