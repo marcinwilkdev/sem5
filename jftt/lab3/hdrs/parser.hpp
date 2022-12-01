@@ -34,8 +34,8 @@
 /* Undocumented macros, especially those whose name start with YY_,
    are private implementation details.  Do not rely on them.  */
 
-#ifndef YY_YY_TEST_Y_H_INCLUDED
-# define YY_YY_TEST_Y_H_INCLUDED
+#ifndef YY_YY_HOME_MARCIN_DEV_SEM5_JFTT_LAB3_PROJECT_HDRS_PARSER_HPP_INCLUDED
+# define YY_YY_HOME_MARCIN_DEV_SEM5_JFTT_LAB3_PROJECT_HDRS_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -75,4 +75,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_TEST_Y_H_INCLUDED  */
+#endif /* !YY_YY_HOME_MARCIN_DEV_SEM5_JFTT_LAB3_PROJECT_HDRS_PARSER_HPP_INCLUDED  */

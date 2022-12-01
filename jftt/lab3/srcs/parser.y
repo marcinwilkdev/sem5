@@ -52,10 +52,3 @@ int yyerror(char *const s)
 /*    printf("%s\n",s);	*/
     return 0;
 }
-
-int main(void)
-{
-    yyparse();
-
-    return 0;
-}

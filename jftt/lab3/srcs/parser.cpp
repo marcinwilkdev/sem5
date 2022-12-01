@@ -66,14 +66,14 @@
 
 
 /* First part of user prologue.  */
-#line 1 "test.y"
+#line 1 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
 
   #include<stdio.h>
 
   int yylex(void);
   int yyerror(char*);
 
-#line 77 "test_y.c"
+#line 77 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -106,8 +106,8 @@
 
 /* Use api.header.include to #include this header
    instead of duplicating it here.  */
-#ifndef YY_YY_TEST_Y_H_INCLUDED
-# define YY_YY_TEST_Y_H_INCLUDED
+#ifndef YY_YY_HOME_MARCIN_DEV_SEM5_JFTT_LAB3_PROJECT_HDRS_PARSER_HPP_INCLUDED
+# define YY_YY_HOME_MARCIN_DEV_SEM5_JFTT_LAB3_PROJECT_HDRS_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -147,7 +147,7 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_TEST_Y_H_INCLUDED  */
+#endif /* !YY_YY_HOME_MARCIN_DEV_SEM5_JFTT_LAB3_PROJECT_HDRS_PARSER_HPP_INCLUDED  */
 
 
 
@@ -1311,73 +1311,73 @@ yyreduce:
   switch (yyn)
     {
   case 5:
-#line 32 "test.y"
+#line 32 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
               { printf("\n= %d\n", yyvsp[-1]); }
-#line 1317 "test_y.c"
+#line 1317 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 6:
-#line 33 "test.y"
+#line 33 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                 { printf("\n> Błąd składni.\n"); }
-#line 1323 "test_y.c"
+#line 1323 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 7:
-#line 34 "test.y"
+#line 34 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                 { printf("\n> Błąd składni.\n"); }
-#line 1329 "test_y.c"
+#line 1329 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 8:
-#line 38 "test.y"
+#line 38 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                         { printf("%d ", yyval); }
-#line 1335 "test_y.c"
+#line 1335 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 9:
-#line 39 "test.y"
+#line 39 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                         { printf("+ "); yyval = (yyvsp[-2] + yyvsp[0]) % 1234577; }
-#line 1341 "test_y.c"
+#line 1341 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 10:
-#line 40 "test.y"
+#line 40 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                         { printf("- "); yyval = (yyvsp[-2] - yyvsp[0]) % 1234577; }
-#line 1347 "test_y.c"
+#line 1347 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 11:
-#line 41 "test.y"
+#line 41 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                         { printf("* "); yyval = (yyvsp[-2] * yyvsp[0]) % 1234577; }
-#line 1353 "test_y.c"
+#line 1353 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 12:
-#line 42 "test.y"
+#line 42 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                         { printf("/ "); yyval = (yyvsp[-2] / yyvsp[0]) % 1234577; }
-#line 1359 "test_y.c"
+#line 1359 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 13:
-#line 43 "test.y"
-                        { printf("o"); yyval = 1234577 - yyvsp[0]; }
-#line 1365 "test_y.c"
+#line 43 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
+                        { yyval = 1234577 - yyvsp[0]; }
+#line 1365 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 14:
-#line 44 "test.y"
+#line 44 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                         { printf("^ "); yyval = yyvsp[-2] * yyvsp[0]; }
-#line 1371 "test_y.c"
+#line 1371 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
   case 15:
-#line 45 "test.y"
+#line 45 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
                         { yyval = yyvsp[-1]; }
-#line 1377 "test_y.c"
+#line 1377 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
     break;
 
 
-#line 1381 "test_y.c"
+#line 1381 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.cpp"
 
       default: break;
     }
@@ -1609,18 +1609,11 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 48 "test.y"
+#line 48 "/home/marcin/dev/sem5/jftt/lab3/project/srcs/parser.y"
 
 
 int yyerror(char *const s)
 {
 /*    printf("%s\n",s);	*/
-    return 0;
-}
-
-int main(void)
-{
-    yyparse();
-
     return 0;
 }
