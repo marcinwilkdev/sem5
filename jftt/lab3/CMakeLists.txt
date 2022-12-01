@@ -26,8 +26,13 @@ target_include_directories(project PRIVATE hdrs)
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
-bison_target(parser srcs/parser.y ${PROJECT_SOURCE_DIR}/genSrcs/parser.cpp DEFINES_FILE ${PROJECT_SOURCE_DIR}/genSrcs/parser.hpp)
-flex_target(lexer srcs/lexer.l ${PROJECT_SOURCE_DIR}/genSrcs/lexer.cpp DEFINES_FILE ${PROJECT_SOURCE_DIR}/genSrcs/lexer.hpp)
+bison_target(parser srcs/parser.y ${PROJECT_SOURCE_DIR}/genSrcs/parser.cpp
+  DEFINES_FILE ${PROJECT_SOURCE_DIR}/genSrcs/parser.hpp
+  VERBOSE REPORT_FILE ${PROJECT_SOURCE_DIR}/genSrcs/bisonLog.log)
+
+flex_target(lexer srcs/lexer.l ${PROJECT_SOURCE_DIR}/genSrcs/lexer.cpp
+  DEFINES_FILE ${PROJECT_SOURCE_DIR}/genSrcs/lexer.hpp)
+
 add_flex_bison_dependency(lexer parser)
 
 # =====

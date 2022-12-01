@@ -9,7 +9,7 @@
 [ \t]+               ;
 ^#(\\\n|.)*\n        ;
 
-[0-9]+               { yylval = atoi(yytext) % 1234577; return NUM; }
+[0-9]+               { yylval = atol(yytext); return NUM; }
 \-                   { return SUB; }
 \+                   { return ADD; }
 \*                   { return MUL; }
