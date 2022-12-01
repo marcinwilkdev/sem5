@@ -35,7 +35,8 @@ line:
 ;
 
 exp:
-    NUM                 { printf("%d ", $$); }
+    SUB NUM %prec NEG   { printf("%d ", (-$$ % 1234577) + 1234577); }
+    | NUM               { printf("%d ", $$); }
     | exp ADD exp       { printf("+ "); $$ = ($1 + $3) % 1234577; }
     | exp SUB exp       { printf("- "); $$ = ($1 - $3) % 1234577; }
     | exp MUL exp       { printf("* "); $$ = ($1 * $3) % 1234577; }

@@ -33,7 +33,7 @@ add_flex_bison_dependency(lexer parser)
 # =====
 
 add_executable(main srcs/main.cpp ${FLEX_lexer_OUTPUTS} ${BISON_parser_OUTPUTS})
-target_include_directories(main PRIVATE hdrs)
+target_include_directories(main PRIVATE hdrs genSrcs)
 target_link_libraries(main project)
 
 add_executable(simpleTest test/simpleTest.cpp)
