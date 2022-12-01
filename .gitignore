@@ -28,3 +28,4 @@ build/
 .cache/
 *.zip
 cmake-scripts/
+genSrcs/
