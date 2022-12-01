@@ -18,12 +18,7 @@ class Polynomial {
  public:
   Polynomial(const std::vector<T> &coefficients);
 
-  template <std::size_t N>
-  Polynomial(const std::array<T, N> &coefficients) {
-    this->coefficients = coefficients;
-
-    this->normalize();
-  }
+  int size() const;
 
   Polynomial operator+(const Polynomial &polynomial) const;
   Polynomial operator-(const Polynomial &polynomial) const;
@@ -41,7 +36,7 @@ class Polynomial {
     }
 
     for (int coeffIdx{0}; coeffIdx < pol1.coefficients.size(); ++coeffIdx) {
-      if (pol1.coefficients[coeffIdx] == pol2.coefficients[coeffIdx]) {
+      if (pol1.coefficients[coeffIdx] != pol2.coefficients[coeffIdx]) {
         return false;
       }
     }
@@ -95,6 +90,11 @@ Polynomial<T>::Polynomial(const std::vector<T> &coefficients) {
   this->coefficients = coefficients;
 
   this->normalize();
+}
+
+template <typename T>
+int Polynomial<T>::size() const {
+  return static_cast<int>(this->coefficients.size());
 }
 
 template <typename T>

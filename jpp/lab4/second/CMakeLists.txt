@@ -27,13 +27,16 @@ target_include_directories(gf PRIVATE hdrs)
 add_library(doubleWrapper srcs/doubleWrapper.cpp hdrs/doubleWrapper.hpp)
 target_include_directories(doubleWrapper PRIVATE hdrs)
 
+add_library(hamming srcs/hamming.cpp hdrs/hamming.hpp)
+target_include_directories(hamming PRIVATE hdrs)
+
 add_executable(main srcs/main.cpp)
 target_include_directories(main PRIVATE hdrs)
-target_link_libraries(main polynomial gf doubleWrapper)
+target_link_libraries(main polynomial gf doubleWrapper hamming)
 
 add_executable(simpleTest test/simpleTest.cpp)
 target_include_directories(simpleTest PRIVATE hdrs)
-target_link_libraries(simpleTest polynomial gf doubleWrapper Catch2::Catch2WithMain)
+target_link_libraries(simpleTest polynomial gf doubleWrapper hamming Catch2::Catch2WithMain)
 
 target_code_coverage(polynomial AUTO)
 target_code_coverage(simpleTest AUTO)

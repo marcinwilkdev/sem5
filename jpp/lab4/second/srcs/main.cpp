@@ -3,6 +3,7 @@
 
 #include "doubleWrapper.hpp"
 #include "gf.hpp"
+#include "hamming.hpp"
 #include "polynomial.hpp"
 
 int main(void) {
@@ -56,6 +57,26 @@ int main(void) {
 
     std::cout << "pol1(1) = " << result << '\n';
     std::cout << "First coeff = " << pol1[0] << '\n';
+  }
+
+  std::cout << '\n';
+
+  {
+    using GF = gf::GF<2>;
+
+    auto code = polynomial::Polynomial<GF>({GF(1), GF(1), GF(1), GF(1)});
+
+    std::cout << "code = " << code << '\n';
+
+    auto encoded = hamming::encode(code);
+
+    std::cout << "Encoded code = " << encoded << '\n';
+
+    encoded[4] = encoded[4] + GF(1);
+
+    auto decoded = hamming::decode(encoded);
+
+    std::cout << "Decoded code = " << decoded << '\n';
   }
 
   return EXIT_SUCCESS;
