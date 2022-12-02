@@ -36,7 +36,7 @@ ParseState ParseState::setNum() {
 }
 
 ParseState ParseState::add(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -50,7 +50,7 @@ ParseState ParseState::add(const ParseState& other) {
 }
 
 ParseState ParseState::sub(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -64,7 +64,7 @@ ParseState ParseState::sub(const ParseState& other) {
 }
 
 ParseState ParseState::mul(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -78,7 +78,7 @@ ParseState ParseState::mul(const ParseState& other) {
 }
 
 ParseState ParseState::div(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -107,7 +107,7 @@ ParseState ParseState::neg() {
 }
 
 ParseState ParseState::exp(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -139,7 +139,7 @@ ParseState ParseState::setNumExp() {
 }
 
 ParseState ParseState::addExp(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -153,7 +153,7 @@ ParseState ParseState::addExp(const ParseState& other) {
 }
 
 ParseState ParseState::subExp(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -167,7 +167,7 @@ ParseState ParseState::subExp(const ParseState& other) {
 }
 
 ParseState ParseState::divExp(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
     this->text = other.text;
     this->isError = true;
   }
@@ -188,7 +188,8 @@ ParseState ParseState::divExp(const ParseState& other) {
 }
 
 ParseState ParseState::mulExp(const ParseState& other) {
-  if (other.isError) {
+  if (!this->isError && other.isError) {
+    this->text = other.text;
     this->isError = true;
   }
 

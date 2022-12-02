@@ -1,4 +1,5 @@
 from sly import Lexer
+from parseState import ParseState
 
 
 class CalcLexer(Lexer):
@@ -22,7 +23,7 @@ class CalcLexer(Lexer):
 
     @_(r'\d+')
     def NUM(self, t):
-        t.value = int(t.value)
+        t.value = ParseState(t.value)
         return t
 
 

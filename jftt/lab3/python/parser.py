@@ -1,8 +1,7 @@
 from sly import Parser
 from lexer import CalcLexer
 
-from gf import GF, GFNoInverseException
-from gf2 import GF2, GF2NoInverseException
+from parseState import ParseState
 
 
 class CalcParser(Parser):
@@ -33,106 +32,83 @@ class CalcParser(Parser):
 
     @_("exp END")
     def line(self, p):
-        print("\n= ", p.exp)
+        print(str(p.exp) + '\n')
 
     @_("error END")
     def line(self, p):
-        print("\nBłąd składni")
+        print("> Błąd składni\n")
 
     @_("ERROR END")
     def line(self, p):
-        print("\nBłąd składni")
+        print("> Błąd składni\n")
 
     @_("SUB NUM %prec NEG")
     def exp(self, p):
-        print(GF(-p.NUM).value(), end=" ")
-        return GF(-p.NUM).value()
+        return p.NUM.setNeg()
 
     @_("NUM")
     def exp(self, p):
-        print(GF(p.NUM).value(), end=" ")
-        return GF(p.NUM).value()
+        return p.NUM.setNum()
 
     @_("exp ADD exp")
     def exp(self, p):
-        print("+ ", end=" ")
-        return GF(p.exp0).value() + GF(p.exp1).value()
+        return p.exp0.add(p.exp1)
 
     @_("exp SUB exp")
     def exp(self, p):
-        print("- ", end=" ")
-        return GF(p.exp0 - p.exp1).value()
+        return p.exp0.sub(p.exp1)
 
     @_("exp MUL exp")
     def exp(self, p):
-        print("* ", end=" ")
-        return GF(p.exp0 * p.exp1).value()
+        return p.exp0.mul(p.exp1)
 
     @_("exp DIV exp")
     def exp(self, p):
-        print("/ ", end=" ")
-        try:
-            return (GF(p.exp0) / GF(p.exp1)).value()
-        except GFNoInverseException:
-            print("\nNie ma odwrotności")
-
-        return 0
+        return p.exp0.div(p.exp1)
 
     @_("SUB exp %prec NEG")
     def exp(self, p):
-        return GF(-p.exp).value()
+        return p.exp.neg()
 
     @_("exp EXP expexp")
     def exp(self, p):
-        print("^ ", end=" ")
-        return (GF(p.exp) ** GF(p.expexp)).value()
+        return p.exp.exp(p.expexp)
 
     @_("LPAR exp RPAR")
     def exp(self, p):
-        return GF(p.exp).value()
+        return p.exp
 
     @_("SUB NUM %prec NEG")
     def expexp(self, p):
-        print(GF2(-p.NUM), end=" ")
-        return GF2(-p.NUM).value()
+        return p.NUM.setNegExp()
 
     @_("NUM")
     def expexp(self, p):
-        print(GF2(p.NUM), end=" ")
-        return GF2(p.NUM).value()
+        return p.NUM.setNumExp()
 
     @_("expexp ADD expexp")
     def expexp(self, p):
-        print("+ ", end=" ")
-        return (GF2(p.expexp0) + GF2(p.expexp1)).value()
+        return p.expexp0.addExp(p.expexp1)
 
     @_("expexp SUB expexp")
     def expexp(self, p):
-        print("- ", end=" ")
-        return (GF2(p.expexp0) - GF2(p.expexp1)).value()
+        return p.expexp0.subExp(p.expexp1)
 
     @_("expexp MUL expexp")
     def expexp(self, p):
-        print("* ", end=" ")
-        return (GF2(p.expexp0) * GF2(p.expexp1)).value()
+        return p.expexp0.mulExp(p.expexp1)
 
     @_("expexp DIV expexp")
     def expexp(self, p):
-        print("/ ", end=" ")
-        try:
-            return (GF2(p.expexp0) / GF2(p.expexp1)).value()
-        except GF2NoInverseException:
-            print("\nNie ma odwrotności")
-
-        return 0
+        return p.expexp0.divExp(p.expexp1)
 
     @_("SUB expexp %prec NEG")
     def expexp(self, p):
-        return GF2(-p.expexp).value()
+        return p.expexp.negExp()
 
     @_("LPAR expexp RPAR")
     def expexp(self, p):
-        return GF2(p.expexp).value()
+        return p.expexp
 
     def error(self, p):
         pass

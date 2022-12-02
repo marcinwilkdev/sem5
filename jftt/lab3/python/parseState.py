@@ -1,5 +1,5 @@
-from gf import GF
-from gf2 import GF2
+from gf import GF, GFNoInverseException, GF_MAX_VALUE
+from gf2 import GF2, GF2NoInverseException, GF2_MAX_VALUE
 
 
 class ParseState:
@@ -12,18 +12,22 @@ class ParseState:
         self.text = ""
         self.isError = False
 
-    def setNeg(self):
+    def setNeg(self) -> "ParseState":
         if not self.isError:
             self.value = GF(-self.value).value()
             self.text = str(self.value) + " "
 
-    def setNum(self):
+        return self
+
+    def setNum(self) -> "ParseState":
         if not self.isError:
             self.value = GF(self.value).value()
             self.text = str(self.value) + " "
 
+        return self
+
     def add(self, other: "ParseState") -> "ParseState":
-        if other.isError:
+        if (not self.isError) and other.isError:
             self.text = other.text
             self.isError = True
 
@@ -33,170 +37,138 @@ class ParseState:
 
         return self
 
-# ParseState ParseState::sub(const ParseState& other) {
-#   if (other.isError) {
-#     this->text = other.text;
-#     this->isError = true;
-#   }
+    def sub(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     this->value = GF(this->value) - GF(other.value);
-#     this->text = this->text + other.text + "- ";
-#   }
+        if not self.isError:
+            self.value = (GF(self.value) - GF(other.value)).value()
+            self.text += other.text + "- "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::mul(const ParseState& other) {
-#   if (other.isError) {
-#     this->text = other.text;
-#     this->isError = true;
-#   }
+    def mul(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     this->value = GF(this->value) * GF(other.value);
-#     this->text = this->text + other.text + "* ";
-#   }
+        if not self.isError:
+            self.value = (GF(self.value) * GF(other.value)).value()
+            self.text += other.text + "* "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::div(const ParseState& other) {
-#   if (other.isError) {
-#     this->text = other.text;
-#     this->isError = true;
-#   }
+    def div(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     try {
-#       this->value = GF(this->value) / GF(other.value);
-#       this->text = this->text + other.text + "/ ";
-#     } catch (gf::GFNoInverseException) {
-#       this->text = std::to_string(GF(other.value)) +
-#                    " nie jest odwracalne modulo " +
-#                    std::to_string(GF::MAX_VALUE);
-#       this->isError = true;
-#     }
-#   }
+        if not self.isError:
+            try:
+                self.value = (GF(self.value) / GF(other.value)).value()
+                self.text += other.text + "/ "
+            except GFNoInverseException:
+                self.text = (
+                    str(GF(other.value).value())
+                    + " nie jest odwracalne modulo "
+                    + str(GF_MAX_VALUE)
+                )
+                self.isError = True
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::neg() {
-#   if (!this->isError) {
-#     this->value = GF(-this->value);
-#   }
+    def neg(self) -> "ParseState":
+        if not self.isError:
+            self.value = GF(-self.value).value()
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::exp(const ParseState& other) {
-#   if (other.isError) {
-#     this->text = other.text;
-#     this->isError = true;
-#   }
+    def exp(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     this->value = GF(this->value) ^ GF(other.value);
-#     this->text = this->text + other.text + "^ ";
-#   }
+        if not self.isError:
+            self.value = (GF(self.value) ** GF(other.value)).value()
+            self.text += other.text + "^ "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::setNegExp() {
-#   if (!this->isError) {
-#     this->value = GF2(-this->value);
-#     this->text = std::to_string(this->value) + ' ';
-#   }
+    def setNegExp(self) -> "ParseState":
+        if not self.isError:
+            self.value = GF2(-self.value).value()
+            self.text = str(self.value) + " "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::setNumExp() {
-#   if (!this->isError) {
-#     this->value = GF2(this->value);
-#     this->text = std::to_string(this->value) + ' ';
-#   }
+    def setNumExp(self) -> "ParseState":
+        if not self.isError:
+            self.value = GF2(self.value).value()
+            self.text = str(self.value) + " "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::addExp(const ParseState& other) {
-#   if (other.isError) {
-#     this->text = other.text;
-#     this->isError = true;
-#   }
+    def addExp(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     this->value = GF2(this->value) + GF2(other.value);
-#     this->text = this->text + other.text + "+ ";
-#   }
+        if not self.isError:
+            self.value = (GF2(self.value) + GF2(other.value)).value()
+            self.text += other.text + "+ "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::subExp(const ParseState& other) {
-#   if (other.isError) {
-#     this->text = other.text;
-#     this->isError = true;
-#   }
+    def subExp(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     this->value = GF2(this->value) - GF2(other.value);
-#     this->text = this->text + other.text + "- ";
-#   }
+        if not self.isError:
+            self.value = (GF2(self.value) - GF2(other.value)).value()
+            self.text += other.text + "- "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::divExp(const ParseState& other) {
-#   if (other.isError) {
-#     this->text = other.text;
-#     this->isError = true;
-#   }
+    def mulExp(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     try {
-#       this->value = GF2(this->value) / GF2(other.value);
-#       this->text = this->text + other.text + "/ ";
-#     } catch (gf::GFNoInverseException) {
-#       this->text = std::to_string(GF2(other.value)) +
-#                    " nie jest odwracalne modulo " +
-#                    std::to_string(GF2::MAX_VALUE);
-#       this->isError = true;
-#     }
-#   }
+        if not self.isError:
+            self.value = (GF2(self.value) * GF2(other.value)).value()
+            self.text += other.text + "* "
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::mulExp(const ParseState& other) {
-#   if (other.isError) {
-#     this->isError = true;
-#   }
+    def divExp(self, other: "ParseState") -> "ParseState":
+        if (not self.isError) and other.isError:
+            self.text = other.text
+            self.isError = True
 
-#   if (!this->isError) {
-#     this->value = GF2(this->value) * GF2(other.value);
-#     this->text = this->text + other.text + "* ";
-#   }
+        if not self.isError:
+            try:
+                self.value = (GF2(self.value) / GF2(other.value)).value()
+                self.text += other.text + "/ "
+            except GF2NoInverseException:
+                self.text = (
+                    str(GF2(other.value).value())
+                    + " nie jest odwracalne modulo "
+                    + str(GF2_MAX_VALUE)
+                )
+                self.isError = True
 
-#   return *this;
-# }
+        return self
 
-# ParseState ParseState::negExp() {
-#   if (!this->isError) {
-#     this->value = GF2(-this->value);
-#   }
+    def negExp(self) -> "ParseState":
+        if not self.isError:
+            self.value = GF2(-self.value).value()
 
-#   return *this;
-# }
+        return self
 
-# std::ostream& operator<<(std::ostream& os, const ParseState& ps) {
-#   if (ps.isError) {
-#     os << "> " << ps.text << '\n';
-#   } else {
-#     os << ps.text << "\n= " << ps.value << '\n';
-#   }
-
-#   return os;
+    def __str__(self):
+        if self.isError:
+            return "> {}".format(self.text)
+        else:
+            return "{}\n= {}".format(self.text, self.value)
