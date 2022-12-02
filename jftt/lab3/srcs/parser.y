@@ -9,9 +9,6 @@
 
   int yylex(void);
   int yyerror(char*);
-
-  using GF = gf::GF<1234577>;
-  using GF2 = gf::GF<1234576>;
 %}
 
 %define api.value.type {parseState::ParseState}
