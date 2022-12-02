@@ -17,7 +17,7 @@ public class Polynomial<P extends PolynomialType<P>> {
     this.normalize();
   }
 
-  public Polynomial<P> add(Polynomial<P> other) {
+  public Polynomial<P> add(final Polynomial<P> other) {
     final int maxDegree =
         this.coefficients.size() > other.coefficients.size()
             ? this.coefficients.size()
@@ -27,18 +27,18 @@ public class Polynomial<P extends PolynomialType<P>> {
       return new Polynomial<P>(new ArrayList<>());
     }
 
-    P neutralElement =
+    final P neutralElement =
         (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
-    var thisIter =
+    final var thisIter =
         Stream.concat(this.coefficients.stream(), Stream.generate(() -> neutralElement)).iterator();
 
-    var otherIter =
+    final var otherIter =
         Stream.concat(other.coefficients.stream(), Stream.generate(() -> neutralElement))
             .iterator();
 
-    Polynomial<P> result =
+    final Polynomial<P> result =
         new Polynomial<>(
             Stream.generate(() -> neutralElement)
                 .map((n) -> n.add(thisIter.next()).add(otherIter.next()))
@@ -60,18 +60,18 @@ public class Polynomial<P extends PolynomialType<P>> {
       return new Polynomial<P>(new ArrayList<>());
     }
 
-    P neutralElement =
+    final P neutralElement =
         (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
-    var thisIter =
+    final var thisIter =
         Stream.concat(this.coefficients.stream(), Stream.generate(() -> neutralElement)).iterator();
 
-    var otherIter =
+    final var otherIter =
         Stream.concat(other.coefficients.stream(), Stream.generate(() -> neutralElement))
             .iterator();
 
-    Polynomial<P> result =
+    final Polynomial<P> result =
         new Polynomial<>(
             Stream.generate(() -> neutralElement)
                 .map((n) -> n.add(thisIter.next()).sub(otherIter.next()))
@@ -84,17 +84,17 @@ public class Polynomial<P extends PolynomialType<P>> {
   }
 
   public Polynomial<P> prod(Polynomial<P> other) {
-    int resultDegree = this.coefficients.size() + other.coefficients.size() - 1;
+    final int resultDegree = this.coefficients.size() + other.coefficients.size() - 1;
 
     if (resultDegree <= 0) {
       return new Polynomial<P>(new ArrayList<>());
     }
 
-    P neutralElement =
+    final P neutralElement =
         (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
-    ArrayList<P> resultCoefficients =
+    final ArrayList<P> resultCoefficients =
         new ArrayList<>(Collections.nCopies(resultDegree, neutralElement));
 
     for (int thisIdx = 0; thisIdx < this.coefficients.size(); thisIdx++) {
@@ -107,7 +107,7 @@ public class Polynomial<P extends PolynomialType<P>> {
       }
     }
 
-    Polynomial<P> result = new Polynomial<>(resultCoefficients);
+    final Polynomial<P> result = new Polynomial<>(resultCoefficients);
 
     result.normalize();
 
@@ -119,9 +119,7 @@ public class Polynomial<P extends PolynomialType<P>> {
       return new Polynomial<P>(new ArrayList<>());
     }
 
-    Polynomial<P> remainder = new Polynomial<>(this.coefficients);
-
-    P neutralElement =
+    final P neutralElement =
         (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
@@ -130,24 +128,26 @@ public class Polynomial<P extends PolynomialType<P>> {
             ? this.coefficients.size() - other.coefficients.size()
             : 0;
 
+    Polynomial<P> remainder = new Polynomial<>(this.coefficients);
+
     Polynomial<P> quotient =
         new Polynomial<>(new ArrayList<>(Collections.nCopies(quotientSize, neutralElement)));
 
     while (remainder.coefficients.size() >= other.coefficients.size()) {
-      P leadingCoefficient =
+      final P leadingCoefficient =
           remainder
               .coefficients
               .get(remainder.coefficients.size() - 1)
               .div(other.coefficients.get(other.coefficients.size() - 1));
 
-      ArrayList<P> newQuotientCoefficients =
+      final ArrayList<P> newQuotientCoefficients =
           new ArrayList<>(
               Collections.nCopies(
                   remainder.coefficients.size() - other.coefficients.size() + 1, neutralElement));
 
       newQuotientCoefficients.set(newQuotientCoefficients.size() - 1, leadingCoefficient);
 
-      Polynomial<P> newQuotient = new Polynomial<>(newQuotientCoefficients);
+      final Polynomial<P> newQuotient = new Polynomial<>(newQuotientCoefficients);
 
       quotient = quotient.add(newQuotient);
       remainder = remainder.sub(other.prod(newQuotient));
@@ -167,7 +167,7 @@ public class Polynomial<P extends PolynomialType<P>> {
 
     Polynomial<P> remainder = new Polynomial<>(this.coefficients);
 
-    P neutralElement =
+    final P neutralElement =
         (this.coefficients.size() > 0 ? this.coefficients.get(0) : other.coefficients.get(0))
             .neutral();
 
@@ -180,20 +180,20 @@ public class Polynomial<P extends PolynomialType<P>> {
         new Polynomial<>(new ArrayList<>(Collections.nCopies(quotientSize, neutralElement)));
 
     while (remainder.coefficients.size() >= other.coefficients.size()) {
-      P leadingCoefficient =
+      final P leadingCoefficient =
           remainder
               .coefficients
               .get(remainder.coefficients.size() - 1)
               .div(other.coefficients.get(other.coefficients.size() - 1));
 
-      ArrayList<P> newQuotientCoefficients =
+      final ArrayList<P> newQuotientCoefficients =
           new ArrayList<>(
               Collections.nCopies(
                   remainder.coefficients.size() - other.coefficients.size() + 1, neutralElement));
 
       newQuotientCoefficients.set(newQuotientCoefficients.size() - 1, leadingCoefficient);
 
-      Polynomial<P> newQuotient = new Polynomial<>(newQuotientCoefficients);
+      final Polynomial<P> newQuotient = new Polynomial<>(newQuotientCoefficients);
 
       quotient = quotient.add(newQuotient);
       remainder = remainder.sub(other.prod(newQuotient));
@@ -206,7 +206,7 @@ public class Polynomial<P extends PolynomialType<P>> {
     return remainder;
   }
 
-  public boolean gt(Polynomial<P> other) {
+  public boolean gt(final Polynomial<P> other) {
     if (this.coefficients.size() > other.coefficients.size()) {
       return true;
     } else if (this.coefficients.size() < other.coefficients.size()) {
@@ -224,7 +224,7 @@ public class Polynomial<P extends PolynomialType<P>> {
     }
   }
 
-  public boolean lt(Polynomial<P> other) {
+  public boolean lt(final Polynomial<P> other) {
     if (this.coefficients.size() < other.coefficients.size()) {
       return true;
     } else if (this.coefficients.size() > other.coefficients.size()) {
@@ -262,11 +262,21 @@ public class Polynomial<P extends PolynomialType<P>> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof Polynomial)) {
+    if (this == obj) {
+      return true;
+    }
+
+    if (obj == null) {
       return false;
     }
 
-    return this.coefficients.equals(((Polynomial<P>) obj).coefficients);
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+
+    final Polynomial<P> other = (Polynomial<P>) obj;
+
+    return this.coefficients.equals(other.coefficients);
   }
 
   @Override
@@ -275,10 +285,10 @@ public class Polynomial<P extends PolynomialType<P>> {
       return "0";
     }
 
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
 
     for (int coeffIdx = this.coefficients.size() - 1; coeffIdx >= 0; coeffIdx--) {
-      P coeff = this.coefficients.get(coeffIdx);
+      final P coeff = this.coefficients.get(coeffIdx);
 
       if (!coeff.equals(coeff.neutral())) {
         if (coeffIdx < this.coefficients.size() - 1) {
@@ -308,10 +318,6 @@ public class Polynomial<P extends PolynomialType<P>> {
       if (!this.coefficients.get(coeffIdx).equals(neutralElement)) {
         break;
       }
-
-      // System.out.println(neutralElement);
-      // System.out.println(this.coefficients.get(coeffIdx));
-      // System.out.println();
 
       this.coefficients.remove(coeffIdx);
     }

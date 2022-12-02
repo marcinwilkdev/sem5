@@ -5,6 +5,7 @@
 namespace doubleWrapper {
 
 DoubleWrapper::DoubleWrapper(const double value) { this->value = value; }
+
 DoubleWrapper::DoubleWrapper() { this->value = 0; }
 
 DoubleWrapper DoubleWrapper::operator+(const DoubleWrapper dw) const {

@@ -29,20 +29,7 @@ class Polynomial {
   T operator()(const T &x) const;
   bool operator<(const Polynomial &polynomial) const;
   bool operator>(const Polynomial &polynomial) const;
-
-  friend bool operator==(const Polynomial<T> &pol1, const Polynomial<T> &pol2) {
-    if (pol1.coefficients.size() != pol2.coefficients.size()) {
-      return false;
-    }
-
-    for (int coeffIdx{0}; coeffIdx < pol1.coefficients.size(); ++coeffIdx) {
-      if (pol1.coefficients[coeffIdx] != pol2.coefficients[coeffIdx]) {
-        return false;
-      }
-    }
-
-    return true;
-  }
+  bool operator==(const Polynomial<T> &pol) const;
 
   friend std::ostream &operator<<(std::ostream &out,
                                   Polynomial<T> &polynomial) {
@@ -88,7 +75,6 @@ class Polynomial {
 template <typename T>
 Polynomial<T>::Polynomial(const std::vector<T> &coefficients) {
   this->coefficients = coefficients;
-
   this->normalize();
 }
 
@@ -277,6 +263,21 @@ bool Polynomial<T>::operator>(const Polynomial<T> &polynomial) const {
   }
 
   return false;
+}
+
+template <typename T>
+bool Polynomial<T>::operator==(const Polynomial<T> &pol) const {
+  if (this->coefficients.size() != pol.coefficients.size()) {
+    return false;
+  }
+
+  for (int coeffIdx{0}; coeffIdx < static_cast<int>(this->coefficients.size()); ++coeffIdx) {
+    if (this->coefficients[coeffIdx] != pol.coefficients[coeffIdx]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 template <typename T>

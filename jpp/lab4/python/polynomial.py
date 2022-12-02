@@ -1,14 +1,14 @@
 from typing import List, TypeVar, Generic
-import polynomialType
+from polynomialType import PolynomialType
 
-T = TypeVar("T", bound=polynomialType.PolynomialType)
+T = TypeVar("T", bound=PolynomialType)
 
 
 class Polynomial(Generic[T]):
     coefficients: List[T]
 
     def __init__(self, coefficients: List[T]):
-        self.coefficients = coefficients[:]
+        self.coefficients = coefficients
 
     def normalize(self):
         if len(self.coefficients) == 0:
@@ -31,11 +31,14 @@ class Polynomial(Generic[T]):
         newCoefficients = []
 
         for coeffIdx in range(maxLen):
-            if coeffIdx < len(self.coefficients) and coeffIdx < len(other.coefficients):
+            selfCoeffLen = len(self.coefficients)
+            otherCoeffLen = len(other.coefficients)
+
+            if coeffIdx < selfCoeffLen and coeffIdx < otherCoeffLen:
                 newCoefficients.append(
                     self.coefficients[coeffIdx] + other.coefficients[coeffIdx]
                 )
-            elif coeffIdx < len(self.coefficients):
+            elif coeffIdx < selfCoeffLen:
                 newCoefficients.append(self.coefficients[coeffIdx])
             else:
                 newCoefficients.append(other.coefficients[coeffIdx])
@@ -61,11 +64,14 @@ class Polynomial(Generic[T]):
         newCoefficients = [neutralElement] * maxLen
 
         for coeffIdx in range(maxLen):
-            if coeffIdx < len(self.coefficients) and coeffIdx < len(other.coefficients):
+            selfCoeffLen = len(self.coefficients)
+            otherCoeffLen = len(other.coefficients)
+
+            if coeffIdx < selfCoeffLen and coeffIdx < otherCoeffLen:
                 newCoefficients[coeffIdx] = (
                     self.coefficients[coeffIdx] - other.coefficients[coeffIdx]
                 )
-            elif coeffIdx < len(self.coefficients):
+            elif coeffIdx < selfCoeffLen:
                 newCoefficients[coeffIdx] = self.coefficients[coeffIdx]
             else:
                 newCoefficients[coeffIdx] = (
@@ -193,9 +199,12 @@ class Polynomial(Generic[T]):
             return False
         else:
             for coeffIdx in reversed(range(len(self.coefficients))):
-                if self.coefficients[coeffIdx] < other.coefficients[coeffIdx]:
+                selfCoeff = self.coefficients[coeffIdx]
+                otherCoeff = other.coefficients[coeffIdx]
+
+                if selfCoeff < otherCoeff:
                     return True
-                elif self.coefficients[coeffIdx] > other.coefficients[coeffIdx]:
+                elif selfCoeff < otherCoeff:
                     return False
 
             return False
@@ -207,9 +216,12 @@ class Polynomial(Generic[T]):
             return False
         else:
             for coeffIdx in reversed(range(len(self.coefficients))):
-                if self.coefficients[coeffIdx] > other.coefficients[coeffIdx]:
+                selfCoeff = self.coefficients[coeffIdx]
+                otherCoeff = other.coefficients[coeffIdx]
+
+                if selfCoeff > otherCoeff:
                     return True
-                elif self.coefficients[coeffIdx] < other.coefficients[coeffIdx]:
+                elif selfCoeff < otherCoeff:
                     return False
 
             return False
@@ -220,7 +232,7 @@ class Polynomial(Generic[T]):
         else:
             return self.coefficients[idx]
 
-    def __call__(self, x: T) -> "polynomialType.PolynomialType":
+    def __call__(self, x: T) -> "PolynomialType":
         result = self.coefficients[0].neutral()
 
         for coeffIdx in range(len(self.coefficients)):

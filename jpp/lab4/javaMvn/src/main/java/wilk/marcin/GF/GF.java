@@ -7,59 +7,46 @@ public class GF implements PolynomialType<GF> {
 
   private long number;
 
-  public GF(long number) throws GFException {
-    if (number < 0) {
-      throw new GFNegativeException("Value can't be negative!");
+  public GF(long number) {
+    while (number < 0) {
+      number += MAX_VALUE;
     }
 
-    if (number >= MAX_VALUE) {
-      throw new GFTooBigException("Value has to be less than: " + MAX_VALUE);
-    }
-
-    this.number = number;
-  }
-
-  public GF() {
-    this.number = 0;
+    this.number = number % MAX_VALUE;
+    ;
   }
 
   public GF neutral() {
-    return new GF();
+    return new GF(0);
   }
 
-  public GF add(GF other) {
-    this.number = (this.number + other.number) % MAX_VALUE;
-
-    return this;
-  }
-
-  public GF sub(GF other) {
-    this.number = (this.number - other.number) % MAX_VALUE;
-
-    if (this.number < 0) {
-      this.number += MAX_VALUE;
+  private GF inverse() {
+    if (this.number == 0) {
+      throw new ArithmeticException("No inverse for 0");
     }
 
-    return this;
+    final long result = gcd(this.number, MAX_VALUE);
+
+    return new GF(result);
   }
 
-  public GF prod(GF other) {
-    this.number = (this.number * other.number) % MAX_VALUE;
-
-    return this;
+  public GF add(final GF other) {
+    return new GF(this.number + other.number);
   }
 
-  public GF div(GF other) {
-    if (other.number == 0) {
-      throw new ArithmeticException("Division by zero!");
-    }
-
-    this.number = this.number / other.number;
-
-    return this;
+  public GF sub(final GF other) {
+    return new GF(this.number - other.number);
   }
 
-  public GF pow(long pow) {
+  public GF prod(final GF other) {
+    return new GF(this.number * other.number);
+  }
+
+  public GF div(final GF other) {
+    return this.prod(other.inverse());
+  }
+
+  public GF pow(final long pow) {
     long number = this.number;
     long result = 1;
 
@@ -74,22 +61,18 @@ public class GF implements PolynomialType<GF> {
       power /= 2;
     }
 
-    try {
-      return new GF(result);
-    } catch (GFException e) {
-      throw new RuntimeException(e);
-    }
+    return new GF(result);
   }
 
   public long toLong() {
     return this.number;
   }
 
-  public boolean gt(GF other) {
+  public boolean gt(final GF other) {
     return this.number > other.number;
   }
 
-  public boolean lt(GF other) {
+  public boolean lt(final GF other) {
     return this.number < other.number;
   }
 
@@ -114,10 +97,34 @@ public class GF implements PolynomialType<GF> {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("GF(");
-    sb.append(this.number);
-    sb.append(")");
+    return String.valueOf(this.number);
+  }
 
-    return sb.toString();
+  private static long gcd(final long a, final long b) {
+    long x = 1;
+    long y = 0;
+
+    long x1 = 0;
+    long y1 = 1;
+    long a1 = a;
+    long b1 = b;
+
+    while (b1 != 0) {
+      long q = a1 / b1;
+
+      final long x1Tmp = x1;
+      x1 = x - q * x1;
+      x = x1Tmp;
+
+      final long y1Tmp = y1;
+      y1 = y - q * y1;
+      y = y1Tmp;
+
+      final long b1Tmp = b1;
+      b1 = a1 - q * b1;
+      a1 = b1Tmp;
+    }
+
+    return x;
   }
 }

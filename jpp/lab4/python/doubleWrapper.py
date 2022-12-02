@@ -1,7 +1,7 @@
-import polynomialType
+from polynomialType import PolynomialType
 
 
-class DoubleWrapper(polynomialType.PolynomialType):
+class DoubleWrapper(PolynomialType):
     value: float
 
     def __init__(self, number: float):

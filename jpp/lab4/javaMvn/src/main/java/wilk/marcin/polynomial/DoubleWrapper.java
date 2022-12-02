@@ -49,15 +49,25 @@ public class DoubleWrapper implements PolynomialType<DoubleWrapper> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof DoubleWrapper)) {
+    if (this == obj) {
+      return true;
+    }
+
+    if (obj == null) {
       return false;
     }
 
-    return this.value == ((DoubleWrapper) obj).value;
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+
+    DoubleWrapper other = (DoubleWrapper) obj;
+
+    return this.value == other.value;
   }
 
   @Override
   public String toString() {
-    return Double.toString(value);
+    return String.valueOf(this.value);
   }
 }
