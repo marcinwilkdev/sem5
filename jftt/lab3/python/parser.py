@@ -1,8 +1,8 @@
 from sly import Parser
 from lexer import CalcLexer
 
-from gf import GF
-from gf2 import GF2
+from gf import GF, GFNoInverseException
+from gf2 import GF2, GF2NoInverseException
 
 
 class CalcParser(Parser):
@@ -71,7 +71,12 @@ class CalcParser(Parser):
     @_("exp DIV exp")
     def exp(self, p):
         print("/ ", end=" ")
-        return GF(p.exp0 / p.exp1).value()
+        try:
+            return (GF(p.exp0) / GF(p.exp1)).value()
+        except GFNoInverseException:
+            print("\nNie ma odwrotności")
+
+        return 0
 
     @_("SUB exp %prec NEG")
     def exp(self, p):
@@ -80,7 +85,7 @@ class CalcParser(Parser):
     @_("exp EXP expexp")
     def exp(self, p):
         print("^ ", end=" ")
-        return GF(p.exp).value() ** GF(p.expexp).value()
+        return (GF(p.exp) ** GF(p.expexp)).value()
 
     @_("LPAR exp RPAR")
     def exp(self, p):
@@ -89,40 +94,45 @@ class CalcParser(Parser):
     @_("SUB NUM %prec NEG")
     def expexp(self, p):
         print(GF2(-p.NUM), end=" ")
-        return GF2(-p.NUM)
+        return GF2(-p.NUM).value()
 
     @_("NUM")
     def expexp(self, p):
         print(GF2(p.NUM), end=" ")
-        return GF2(p.NUM)
+        return GF2(p.NUM).value()
 
     @_("expexp ADD expexp")
     def expexp(self, p):
         print("+ ", end=" ")
-        return GF2(p.expexp0) + GF2(p.expexp1)
+        return (GF2(p.expexp0) + GF2(p.expexp1)).value()
 
     @_("expexp SUB expexp")
     def expexp(self, p):
         print("- ", end=" ")
-        return GF2(p.expexp0) - GF2(p.expexp1)
+        return (GF2(p.expexp0) - GF2(p.expexp1)).value()
 
     @_("expexp MUL expexp")
     def expexp(self, p):
         print("* ", end=" ")
-        return GF2(p.expexp0) * GF2(p.expexp1)
+        return (GF2(p.expexp0) * GF2(p.expexp1)).value()
 
     @_("expexp DIV expexp")
     def expexp(self, p):
         print("/ ", end=" ")
-        return GF2(p.expexp0) / GF2(p.expexp1)
+        try:
+            return (GF2(p.expexp0) / GF2(p.expexp1)).value()
+        except GF2NoInverseException:
+            print("\nNie ma odwrotności")
+
+        return 0
 
     @_("SUB expexp %prec NEG")
     def expexp(self, p):
-        return GF2(-p.expexp)
+        return GF2(-p.expexp).value()
 
     @_("LPAR expexp RPAR")
     def expexp(self, p):
-        return GF2(p.expexp)
+        return GF2(p.expexp).value()
 
     def error(self, p):
         pass
@@ -134,7 +144,7 @@ if __name__ == "__main__":
 
     while True:
         try:
-            text = input("calc > ")
+            text = input()
             result = parser.parse(lexer.tokenize(text + "\n"))
         except EOFError:
             break

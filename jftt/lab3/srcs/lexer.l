@@ -9,7 +9,7 @@
 [ \t]+               ;
 ^#(\\\n|.)*\n        ;
 
-[0-9]+               { yylval.value = atol(yytext); return NUM; }
+[0-9]+               { yylval = parseState::ParseState(yytext); return NUM; }
 \-                   { return SUB; }
 \+                   { return ADD; }
 \*                   { return MUL; }

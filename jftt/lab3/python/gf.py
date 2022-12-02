@@ -1,3 +1,5 @@
+from typing import List
+
 GF_MAX_VALUE = 1234577
 
 
@@ -11,40 +13,25 @@ class GF:
         self.number = number % GF_MAX_VALUE
 
     def neutral(self) -> "GF":
-        try:
-            return GF(0)
-        except GFException:
-            exit(-1)
+        return GF(0)
 
     def __add__(self, other: "GF") -> "GF":
-        new_value = (self.number + other.number) % GF_MAX_VALUE
-
-        return GF(new_value)
+        return GF(self.number + other.number)
 
     def __sub__(self, other: "GF") -> "GF":
-        new_value = (self.number - other.number) % GF_MAX_VALUE
-
-        if new_value < 0:
-            new_value += GF_MAX_VALUE
-
-        return GF(new_value)
+        return GF(self.number - other.number)
 
     def __mul__(self, other: "GF") -> "GF":
-        new_value = (self.number * other.number) % GF_MAX_VALUE
-        return GF(new_value)
+        return GF(self.number * other.number)
 
     def __truediv__(self, other: "GF") -> "GF":
-        if other.number == 0:
-            raise GFDivisionByZeroException
+        return self * other.inverse()
 
-        new_value = self.number // other.number
-        return GF(new_value)
-
-    def __pow__(self, other: int) -> "GF":
+    def __pow__(self, other: "GF") -> "GF":
         number = self.number
         result = 1
 
-        power = other
+        power = other.number
 
         while power > 0:
             if power % 2 == 1:
@@ -65,15 +52,41 @@ class GF:
         return self.number == other.number
 
     def __str__(self) -> str:
-        return "GF({})".format(self.number)
+        return str(self.number)
 
     def value(self) -> int:
         return self.number
+
+    def inverse(self) -> "GF":
+        if self.number == 0:
+            raise GFNoInverseException
+
+        [a, x, _] = gcd(self.number, GF_MAX_VALUE)
+
+        if a > 1:
+            raise GFNoInverseException
+
+        return GF(x)
+
+
+def gcd(a: int, b: int) -> List[int]:
+    x, y = 1, 0
+    x1, y1 = 0, 1
+    a1, b1 = a, b
+
+    while b1 != 0:
+        q = a1 // b1
+
+        x, x1 = x1, x - q * x1
+        y, y1 = y1, y - q * y1
+        b1, a1 = a1 - q * b1, b1
+
+    return [a1, x, y]
 
 
 class GFException(Exception):
     pass
 
 
-class GFDivisionByZeroException(GFException):
+class GFNoInverseException(GFException):
     pass

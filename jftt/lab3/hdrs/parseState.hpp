@@ -12,7 +12,27 @@ class ParseState {
   bool isError{false};
 
  public:
-  ParseState(long value);
+  ParseState();
+  ParseState(std::string text);
+
+  ParseState setNeg();
+  ParseState setNum();
+  ParseState add(const ParseState& other);
+  ParseState sub(const ParseState& other);
+  ParseState mul(const ParseState& other);
+  ParseState div(const ParseState& other);
+  ParseState neg();
+  ParseState exp(const ParseState& other);
+
+  ParseState setNegExp();
+  ParseState setNumExp();
+  ParseState addExp(const ParseState& other);
+  ParseState subExp(const ParseState& other);
+  ParseState mulExp(const ParseState& other);
+  ParseState divExp(const ParseState& other);
+  ParseState negExp();
+
+  friend std::ostream& operator<<(std::ostream& os, const ParseState& ps);
 };
 
 }  // namespace parseState

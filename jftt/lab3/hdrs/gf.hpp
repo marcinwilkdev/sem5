@@ -5,9 +5,6 @@
 
 namespace gf {
 
-bool isPrime(long number);
-long gcd(long a, long b, long &x, long &y);
-
 class GFException : std::exception {};
 class GFNoInverseException : GFException {};
 
@@ -69,10 +66,31 @@ GF<P> GF<P>::inverse() const {
     throw GFNoInverseException();
   }
 
-  long x{};
-  long y{};
+  long x = 1;
+  long y = 0;
 
-  if (gcd(this->number, GF::MAX_VALUE, x, y) > 1) {
+  long x1 = 0;
+  long y1 = 1;
+  long b1 = GF::MAX_VALUE;
+  long a1 = this->number;
+
+  while (b1) {
+    long q = a1 / b1;
+
+    const long x1Tmp = x1;
+    x1 = x - q * x1;
+    x = x1Tmp;
+
+    const long y1Tmp = y1;
+    y1 = y - q * y1;
+    y = y1Tmp;
+
+    const long b1Tmp = b1;
+    b1 = a1 - q * b1;
+    a1 = b1Tmp;
+  }
+
+  if (a1 > 1) {
     throw GFNoInverseException();
   }
 

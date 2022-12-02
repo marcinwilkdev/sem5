@@ -21,6 +21,9 @@ find_package(Catch2 3 REQUIRED)
 add_library(gf srcs/gf.cpp hdrs/gf.hpp)
 target_include_directories(gf PRIVATE hdrs)
 
+add_library(parseState srcs/parseState.cpp hdrs/parseState.hpp)
+target_include_directories(parseState PRIVATE hdrs)
+
 # =====
 
 find_package(BISON REQUIRED)
@@ -39,7 +42,7 @@ add_flex_bison_dependency(lexer parser)
 
 add_executable(main srcs/main.cpp ${FLEX_lexer_OUTPUTS} ${BISON_parser_OUTPUTS})
 target_include_directories(main PRIVATE hdrs genSrcs)
-target_link_libraries(main gf)
+target_link_libraries(main gf parseState)
 
 add_executable(simpleTest test/simpleTest.cpp)
 target_include_directories(simpleTest PRIVATE hdrs)
