@@ -1,16 +1,6 @@
-#include "project.hpp"
+#include "gf.hpp"
 
 namespace gf {
-
-bool isPrime(const long number) {
-  for (long i = 2; i * i <= number; ++i) {
-    if (number % i == 0) {
-      return false;
-    }
-  }
-
-  return true;
-}
 
 long gcd(const long a, const long b, long &x, long &y) {
   x = 1, y = 0;

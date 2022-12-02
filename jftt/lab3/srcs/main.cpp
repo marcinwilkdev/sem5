@@ -1,7 +1,7 @@
 #include <cstdlib>
 
 #include "parser.hpp"
-#include "project.hpp"
+#include "gf.hpp"
 
 int main(void) {
   yyparse();

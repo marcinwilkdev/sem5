@@ -1,6 +1,11 @@
+%code requires {
+  #include <iostream>
+  #include "../hdrs/parseState.hpp"
+}
+
 %{
-  #include <stdio.h>
-  #include "../hdrs/project.hpp"
+  #include <sstream>
+  #include "../hdrs/gf.hpp"
 
   int yylex(void);
   int yyerror(char*);
@@ -9,7 +14,7 @@
   using GF2 = gf::GF<1234576>;
 %}
 
-%define api.value.type {long}
+%define api.value.type {struct { long value; std::string text; }}
 
 %token NUM
 
@@ -35,32 +40,32 @@ input:
 
 line:
     END
-    | exp END   { std::cout << "\n= " << $1 << "\n\n"; }
+    | exp END   { std::cout << $1.text << "\n= " << $1.value << "\n\n"; }
     | error END { std::cout << "\n> Błąd składni.\n\n"; }
     | ERROR END { std::cout << "\n> Błąd składni.\n\n"; }
 ;
 
 exp:
-    SUB NUM %prec NEG   { std::cout << GF(-$2) << ' '; $$ = GF(-$2); }
-    | NUM               { std::cout << GF( $1) << ' '; $$ = GF( $1); }
-    | exp ADD exp       { std::cout << "+ "; $$ = GF($1) + GF($3); }
-    | exp SUB exp       { std::cout << "- "; $$ = GF($1) - GF($3); }
-    | exp MUL exp       { std::cout << "* "; $$ = GF($1) * GF($3); }
-    | exp DIV exp       { std::cout << "/ "; try {$$ = GF($1) / GF($3);} catch (gf::GFNoInverseException) {std::cout << '\n' << GF($3) << " nie jest odwracalne modulo " << GF::MAX_VALUE; } }
-    | SUB exp %prec NEG { $$ = GF(-$2); }
-    | exp EXP expexp    { std::cout << "^ "; $$ = GF($1) ^ GF($3);}
-    | LPAR exp RPAR     { $$ = GF($2); }
+    SUB NUM %prec NEG   { $$.value = GF(-$2.value); $$.text = std::to_string($$.value) + ' '; }
+    | NUM               { $$.value = GF( $1.value); $$.text = std::to_string($$.value) + ' '; }
+    | exp ADD exp       { $$.value = GF($1.value) + GF($3.value); $$.text = $1.text + $3.text + "+ "; }
+    | exp SUB exp       { $$.value = GF($1.value) - GF($3.value); $$.text = $1.text + $3.text + "- "; }
+    | exp MUL exp       { $$.value = GF($1.value) * GF($3.value); $$.text = $1.text + $3.text + "* "; }
+    | exp DIV exp       { try {$$.value = GF($1.value) / GF($3.value); $$.text = $1.text + $3.text + "/ ";} catch (gf::GFNoInverseException) {$$.text = std::to_string(GF($3.value)) + " nie jest odwracalne modulo " + std::to_string(GF::MAX_VALUE); }}
+    | SUB exp %prec NEG { $$.value = GF(-$2.value); $$.text = $2.text; }
+    | exp EXP expexp    { $$.value = GF($1.value) ^ GF($3.value); $$.text = $1.text + $3.text + "^ "; }
+    | LPAR exp RPAR     { $$.value = GF($2.value); $$.text = $2.text; }
 ;
 
 expexp:
-    SUB NUM %prec NEG      { std::cout << GF2(-$2) << ' '; $$ = GF2(-$2); }
-    | NUM                  { std::cout << GF2( $1) << ' '; $$ = GF2( $1); }
-    | expexp ADD expexp    { std::cout << "+ "; $$ = GF2($1) + GF2($3); }
-    | expexp SUB expexp    { std::cout << "- "; $$ = GF2($1) - GF2($3); }
-    | expexp MUL expexp    { std::cout << "* "; $$ = GF2($1) * GF2($3); }
-    | expexp DIV expexp    { std::cout << "/ "; try {$$ = GF2($1) / GF2($3);} catch (gf::GFNoInverseException) {std::cout << '\n' << GF2($1) << " nie jest odwracalne modulo " << GF2::MAX_VALUE; } }
-    | SUB expexp %prec NEG { $$ = GF2(-$2); }
-    | LPAR expexp RPAR     { $$ = GF2($2); }
+    SUB NUM %prec NEG      { $$.value = GF2(-$2.value); $$.text = std::to_string($$.value) + ' '; }
+    | NUM                  { $$.value = GF2( $1.value); $$.text = std::to_string($$.value) + ' '; }
+    | expexp ADD expexp    { $$.value = GF2($1.value) + GF2($3.value); $$.text = $1.text + $3.text + "+ "; }
+    | expexp SUB expexp    { $$.value = GF2($1.value) - GF2($3.value); $$.text = $1.text + $3.text + "- "; }
+    | expexp MUL expexp    { $$.value = GF2($1.value) * GF2($3.value); $$.text = $1.text + $3.text + "* "; }
+    | expexp DIV expexp    { try {$$.value = GF2($1.value) / GF2($3.value); $$.text = $1.text + $3.text + "/ ";} catch (gf::GFNoInverseException) {$$.text = std::to_string(GF2($3.value)) + " nie jest odwracalne modulo " + std::to_string(GF2::MAX_VALUE); }}
+    | SUB expexp %prec NEG { $$.value = GF2(-$2.value); $$.text = $2.text; }
+    | LPAR expexp RPAR     { $$.value = GF2($2.value); $$.text = $2.text; }
 ;
 
 %%

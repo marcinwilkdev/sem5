@@ -1,5 +1,5 @@
-#ifndef PROJECT_HPP
-#define PROJECT_HPP
+#ifndef GF_HPP
+#define GF_HPP
 
 #include <iostream>
 
@@ -32,14 +32,9 @@ class GF {
   GF operator^(const GF &gf) const;
   bool operator<(const GF &gf) const;
   bool operator>(const GF &gf) const;
+  bool operator==(const GF &gf) const;
 
   operator long();
-
-  long value() const;
-
-  friend bool operator==(const GF<P> &gf1, const GF<P> &gf2) {
-    return gf1.number == gf2.number;
-  }
 
   friend std::ostream &operator<<(std::ostream &out, const GF<P> &gf) {
     out << gf.number;
@@ -53,26 +48,6 @@ class GF {
     return in;
   }
 };
-
-template <long P>
-GF<P> GF<P>::inverse() const {
-  if (this->number == 0) {
-    throw GFNoInverseException();
-  }
-
-  long x{};
-  long y{};
-
-  if (gcd(this->number, GF::MAX_VALUE, x, y) > 1) {
-    throw GFNoInverseException();
-  }
-
-  if (x < 0) {
-    x += GF::MAX_VALUE;
-  }
-
-  return x;
-}
 
 template <long P>
 GF<P>::GF(long number) {
@@ -89,41 +64,47 @@ GF<P>::GF() {
 }
 
 template <long P>
-GF<P> GF<P>::operator+(const GF<P> &gf) const {
-  const long newValue = (number + gf.number) % GF<P>::MAX_VALUE;
+GF<P> GF<P>::inverse() const {
+  if (this->number == 0) {
+    throw GFNoInverseException();
+  }
 
-  return {newValue};
+  long x{};
+  long y{};
+
+  if (gcd(this->number, GF::MAX_VALUE, x, y) > 1) {
+    throw GFNoInverseException();
+  }
+
+  return GF<P>(x);
+}
+
+template <long P>
+GF<P> GF<P>::operator+(const GF<P> &gf) const {
+  return GF<P>(this->number + gf.number);
 }
 
 template <long P>
 GF<P> GF<P>::operator-(const GF<P> &gf) const {
-  long newValue = (number - gf.number) % GF<P>::MAX_VALUE;
-
-  if (newValue < 0) {
-    newValue += GF<P>::MAX_VALUE;
-  }
-
-  return {newValue};
+  return GF<P>(this->number - gf.number);
 }
 
 template <long P>
 GF<P> GF<P>::operator*(const GF<P> &gf) const {
-  const long newValue = (number * gf.number) % GF<P>::MAX_VALUE;
-
-  return {newValue};
+  return GF<P>(this->number * gf.number);
 }
 
 template <long P>
 GF<P> GF<P>::operator/(const GF<P> &gf) const {
-  const long newValue = (number * gf.inverse().number) % GF<P>::MAX_VALUE;
-
-  return {newValue};
+  return (*this) * gf.inverse();
 }
 
 template <long P>
 GF<P> GF<P>::operator^(const GF<P> &gf) const {
   long number = this->number;
   long result = 1;
+
+  std::string a{std::to_string(result)};
 
   long power = gf.number;
 
@@ -141,17 +122,22 @@ GF<P> GF<P>::operator^(const GF<P> &gf) const {
 
 template <long P>
 bool GF<P>::operator<(const GF<P> &gf) const {
-  return number < gf.number;
+  return this->number < gf.number;
 }
 
 template <long P>
 bool GF<P>::operator>(const GF<P> &gf) const {
-  return number > gf.number;
+  return this->number > gf.number;
+}
+
+template <long P>
+bool GF<P>::operator==(const GF<P> &gf) const {
+  return this->number == gf.number;
 }
 
 template <long P>
 GF<P>::operator long() {
-  return number;
+  return this->number;
 };
 
 }  // namespace gf
