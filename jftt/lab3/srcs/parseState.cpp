@@ -101,6 +101,7 @@ ParseState ParseState::div(const ParseState& other) {
 ParseState ParseState::neg() {
   if (!this->isError) {
     this->value = GF(-this->value);
+    this->text += "~ ";
   }
 
   return *this;
@@ -204,6 +205,7 @@ ParseState ParseState::mulExp(const ParseState& other) {
 ParseState ParseState::negExp() {
   if (!this->isError) {
     this->value = GF2(-this->value);
+    this->text += "~ ";
   }
 
   return *this;

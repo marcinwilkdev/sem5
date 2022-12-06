@@ -81,6 +81,7 @@ class ParseState:
     def neg(self) -> "ParseState":
         if not self.isError:
             self.value = GF(-self.value).value()
+            self.text += "~ "
 
         return self
 
@@ -164,6 +165,7 @@ class ParseState:
     def negExp(self) -> "ParseState":
         if not self.isError:
             self.value = GF2(-self.value).value()
+            self.text += "~ "
 
         return self
 

@@ -43,26 +43,26 @@ line:
 ;
 
 exp:
-    SUB NUM %prec NEG   { $$ = $2.setNeg(); }
-    | NUM               { $$ = $1.setNum(); }
-    | exp ADD exp       { $$ = $1.add($3); }
-    | exp SUB exp       { $$ = $1.sub($3); }
-    | exp MUL exp       { $$ = $1.mul($3); }
-    | exp DIV exp       { $$ = $1.div($3); }
-    | SUB exp %prec NEG { $$ = $2.neg(); }
-    | exp EXP expexp    { $$ = $1.exp($3); }
-    | LPAR exp RPAR     { $$ = $2; }
+    SUB NUM %prec NEG             { $$ = $2.setNeg(); }
+    | NUM                         { $$ = $1.setNum(); }
+    | exp ADD exp                 { $$ = $1.add($3); }
+    | exp SUB exp                 { $$ = $1.sub($3); }
+    | exp MUL exp                 { $$ = $1.mul($3); }
+    | exp DIV exp                 { $$ = $1.div($3); }
+    | SUB LPAR exp RPAR %prec NEG { $$ = $3.neg(); }
+    | exp EXP expexp              { $$ = $1.exp($3); }
+    | LPAR exp RPAR               { $$ = $2; }
 ;
 
 expexp:
-    SUB NUM %prec NEG      { $$ = $2.setNegExp(); }
-    | NUM                  { $$ = $1.setNumExp(); }
-    | expexp ADD expexp    { $$ = $1.addExp($3); }
-    | expexp SUB expexp    { $$ = $1.subExp($3); }
-    | expexp MUL expexp    { $$ = $1.mulExp($3); }
-    | expexp DIV expexp    { $$ = $1.divExp($3); }
-    | SUB expexp %prec NEG { $$ = $2.negExp(); }
-    | LPAR expexp RPAR     { $$ = $2; }
+    SUB NUM %prec NEG                { $$ = $2.setNegExp(); }
+    | NUM                            { $$ = $1.setNumExp(); }
+    | expexp ADD expexp              { $$ = $1.addExp($3); }
+    | expexp SUB expexp              { $$ = $1.subExp($3); }
+    | expexp MUL expexp              { $$ = $1.mulExp($3); }
+    | expexp DIV expexp              { $$ = $1.divExp($3); }
+    | SUB LPAR expexp RPAR %prec NEG { $$ = $3.negExp(); }
+    | LPAR expexp RPAR               { $$ = $2; }
 ;
 
 %%

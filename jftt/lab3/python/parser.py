@@ -66,7 +66,7 @@ class CalcParser(Parser):
     def exp(self, p):
         return p.exp0.div(p.exp1)
 
-    @_("SUB exp %prec NEG")
+    @_("SUB LPAR exp RPAR %prec NEG")
     def exp(self, p):
         return p.exp.neg()
 
@@ -102,7 +102,7 @@ class CalcParser(Parser):
     def expexp(self, p):
         return p.expexp0.divExp(p.expexp1)
 
-    @_("SUB expexp %prec NEG")
+    @_("SUB LPAR expexp RPAR %prec NEG")
     def expexp(self, p):
         return p.expexp.negExp()
 
@@ -121,6 +121,12 @@ if __name__ == "__main__":
     while True:
         try:
             text = input()
-            result = parser.parse(lexer.tokenize(text + "\n"))
+
+            while len(text) > 1 and text[-1] == '\\':
+                text += '\n' + input()
+
+            tokens = lexer.tokenize(text + "\n")
+
+            result = parser.parse(tokens)
         except EOFError:
             break
