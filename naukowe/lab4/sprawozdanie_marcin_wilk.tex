@@ -1,0 +1,256 @@
+\documentclass{article}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[skip=10pt]{parskip}
+\usepackage{algpseudocode}
+
+\begin{document}
+
+\begin{center}
+	\textbf{\LARGE Sprawozdanie lista 3} \\
+	{\large Marcin Wilk 261722} \\
+
+\end{center}
+
+\noindent \textbf{\large Zadanie 1}
+
+\noindent \textbf{Opis problemu} \\
+Napisać funkcję rozwiązującą równanie $f(x)=0$ metodą bisekcji.
+
+\noindent \textbf{Opis rozwiązania} \\
+Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
+
+\noindent \textbf{Pseudokod}
+
+\begin{algorithmic}
+	\State \textbf{Input:} $f, a, b, \delta, \epsilon$
+	\State $u \gets f(a); v \gets f(b)$
+	\If{$u*v>0.0$}
+	\State \Return{$(0,0,0,1)$}
+	\EndIf
+	\State $e \gets b - a$
+	\State $i \gets 0$
+	\Loop
+	\State $e \gets e/2$
+	\State $c \gets a+e$
+	\State $w \gets f(c)$
+
+	\If{$abs(e) <= delta $ \textbf{or} $ abs(w) <= epsilon$}
+	\State \Return{$(c, w, iterations, 0)$}
+	\EndIf
+
+	\If{$ w * u < 0.0$}
+	\State $b \gets c$
+	\State $v \gets w$
+	\Else
+	\State $a \gets c$
+	\State $u \gets w$
+	\EndIf
+
+	\State $i \gets i + 1$
+	\EndLoop
+\end{algorithmic}
+
+\noindent \textbf{\large Zadanie 2}
+
+\noindent \textbf{Opis problemu} \\
+Napisać funkcję rozwiązującą równanie $f(x)=0$ metodą Newtona.
+
+\noindent \textbf{Opis rozwiązania} \\
+Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
+
+\pagebreak
+
+\noindent \textbf{Pseudokod}
+\begin{algorithmic}
+	\State \textbf{Input:} $f, pf, x_0, \delta, \epsilon, maxit$
+	\State $v \gets f(x_0)$
+
+	\If{$abs(v) < \epsilon$}
+	\State \Return{$(x_0, v, 0, 0)$}
+	\EndIf
+
+	\For{$k $ \textbf{in} $1$ \textbf{to} $maxit$}
+	\State $p \gets pf(x_0)$
+
+	\If{$abs(p) < \epsilon$}
+	\State \Return{$(x_0, v, k, 2)$}
+	\EndIf
+
+	\State $x_1 \gets x_0 - v / p$
+	\State $v \gets f(x_1)$
+
+	\If{$abs(x_1 - x_0) <= \delta$ \textbf{or} $abs(v) <= \epsilon$}
+	\State \Return{$(x_1, v, k, 0)$}
+	\EndIf
+
+	\State $x_0 \gets x_1$
+	\EndFor
+
+	\State \Return{$(x_0, v, maxit, 1)$}
+\end{algorithmic}
+
+\noindent \textbf{\large Zadanie 3}
+
+\noindent \textbf{Opis problemu} \\
+Napisać funkcję rozwiązującą równanie $f(x)=0$ metodą siecznych.
+
+\noindent \textbf{Opis rozwiązania} \\
+Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
+
+\noindent \textbf{Pseudokod}
+\begin{algorithmic}
+	\State $fa \gets f(a)$
+	\State $fb \gets f(b)$
+
+	\For{$k$ \textbf{in} $1:maxit$}
+	\If{$abs(fa) < abs(fb)$}
+	\State $a,b \gets b,a$
+	\State $fa,fb \gets fb,fa$
+	\EndIf
+
+	\State $s \gets (b - a) / (fb - fa)$
+	\State $b \gets a$
+	\State $fb \gets fa$
+	\State $a \gets a - s * fa$
+	\State $fa \gets f(a)$
+
+	\If{$abs(fa) < epsilon$ \textbf{or} $abs(b - a) < delta$}
+	\State \Return{$(a, fa, k, 0)$}
+	\EndIf
+	\EndFor
+
+	\State \Return{$(a, fa, maxit, 1)$}
+\end{algorithmic}
+
+\pagebreak
+
+\noindent \textbf{\large Zadanie 4}
+
+\noindent \textbf{Opis problemu} \\
+Zastosować iteracyjne metody wyznaczania pierwiastka do równania
+$sin(x)-(\frac{1}{2}x)^2=0$.
+
+\noindent \textbf{Opis rozwiązania} \\
+Zastosować algorytmy bisekcji, Newtona oraz siecznych do policzenia pierwiastka i
+porównać wyniki. (Pochodna funkcji wynosi $cos(x) - x$).
+
+\noindent \textbf{Rezultat}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Algorytm} & \textbf{Wyliczone $x$} & \textbf{Wyliczone $f(x)$}    & \textbf{Liczba iteracji} \\
+		\hline
+		Bisekcji          & $1.9337539672851562$   & $-2.7027680138402843*10^{7}$ & $15$                     \\
+		\hline
+		Newtona           & $1.933749984135789$    & $4.995107540040067*10^{6}$   & $13$                     \\
+		\hline
+		Siecznych         & $1.9337520915384605$   & $2.2093034668380085*10^{6}$  & $28$                     \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+Wszystkie trzy algorytmy radzą sobie z tym zagadanieniem bez problemu, ale widać, że w tym przypadku
+algorytmy bisekcji oraz Newtona są mniej więcej 2 razy szybsze niż algorytm siecznych.
+
+\noindent \textbf{\large Zadanie 5}
+
+\noindent \textbf{Opis problemu} \\
+Metodą bisekcji znaleźć wartości zmiennej $x$, dla której przecinają się wykresy funkcji $y = 3x$
+i $y = e^x$.
+
+\noindent \textbf{Opis rozwiązania} \\
+Doprowadzić funkcję do postaci $x - log(3x) = 0$. Zastosować algorytm do odszukania pierwiastków.
+
+\noindent \textbf{Rezultat}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Pierwiastek} & \textbf{Wyliczone $x$} & \textbf{Wyliczone $f(x)$}    & \textbf{Liczba iteracji} \\
+		\hline
+		$>1$                 & $1.51220703125$        & $2.4548768085885797*10^{5}$  & $10$                     \\
+		\hline
+		$<1$                 & $0.619140625$          & $-4.8812505882511736*10^{5}$ & $8$                      \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+Jeżeli dobrze przekształcimy funcję, której rozwiązania chcemy wyznaczyć oraz zastosujemy odpowiednie
+odcinki startowe, to możemy w szybki sposób znaleźć przybliżone rozwiązania przy pomocy metody bisekcji.
+
+\pagebreak
+
+\noindent \textbf{\large Zadanie 6}
+
+\noindent \textbf{Opis problemu} \\
+Znaleźć miejsce zerowe funkcji $f_1(x) = e^{1-x} - 1$ oraz $f_2(x) = xe^{-x}$
+za pomocą metod bisekcji, Newtona i siecznych.
+
+\noindent \textbf{Opis rozwiązania} \\
+Zastosować algorytmy do odszukania pierwiastków i porównać wyniki.
+
+\noindent \textbf{Rezultat}
+
+\noindent \textbf{$f_1(x) = e^{1-x} - 1$}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Algorytm} & \textbf{Wyliczone $x$} & \textbf{Wyliczone $f(x)$}   & \textbf{Liczba iteracji} \\
+		\hline
+		Bisekcji          & $1.0000038146972656$   & $-3.814689989667386*10^{6}$ & $17$                     \\
+		\hline
+		Newtona           & $0.9999984358892101$   & $1.5641120130194253*10^{6}$ & $4$                      \\
+		\hline
+		Siecznych         & $1.000006725645982$    & $-6.725623364789435*10^{6}$ & $16$                     \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\noindent \textbf{$f_2(x) = xe^{-x}$}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Algorytm} & \textbf{Wyliczone $x$}      & \textbf{Wyliczone $f(x)$}  & \textbf{Liczba iteracji} \\
+		\hline
+		Bisekcji          & $7.62939453125*10^{6}$      & $7.62933632381113*10^{6}$  & $16$                     \\
+		\hline
+		Newtona           & $14.398662765680003$        & $8.03641534421721*10^{6}$  & $10$                     \\
+		\hline
+		Siecznych         & $7.2229790848421516*10^{6}$ & $7.222926913603708*10^{6}$ & $31$                     \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\noindent \textbf{Wnioski} \\
+W przypadku drugiej funkcji sytuacja wygląda podobnie do poprzedniego zadania, metoda Newtona daje
+najszybsze rezultaty, a siecznych najwolniejsze, jednak dla pierwszej funkcji metoda bisekcji jest najwolniejsza.
+W tym przypadku wpływ na to może mieć wybór odcinków początkowych nieprzychylnych dla danych metod.
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Wnioski} & \textbf{Wyliczone $x$} & \textbf{Wyliczone $f(x)$}   & \textbf{Liczba iteracji} \\
+		\hline
+		Pierwszy         & $0.9999999810061002$   & $1.8993900008368314*10^{8}$ & $5$                      \\
+		\hline
+		Drugi            & $14.380524159896261$   & $8.173205649825554*10^{6}$  & $4$                      \\
+		\hline
+		Trzeci           & $pf(x_0) = 0.0$        & $pf(x_0) = 0.0$             & $pf(x_0) = 0.0$          \\
+		\hline
+	\end{tabular}
+\end{center}
+
+Metoda Newtona radzi sobie z różnymi wybranymi $x_0$ dla obu funkcji, chyba, że jest to równe $0$
+(wtedy wartość pochodnej funkcji za bardzo się zbliża do zera).
+
+\end{document}
