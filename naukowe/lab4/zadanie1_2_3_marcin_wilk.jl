@@ -47,7 +47,7 @@ function naturalna(x::Vector{Float64}, fx::Vector{Float64})
     return a
 end
 
-function rysujNnfx(f, a::Float64, b::Float64, n::Int)
+function rysujNnfx(label, f, a::Float64, b::Float64, n::Int)
     h = (b - a) / n
     xs = [a + k * h for k in 0:n]
     ys = [f(x) for x in xs]
@@ -62,7 +62,7 @@ function rysujNnfx(f, a::Float64, b::Float64, n::Int)
 
     plot(printxs, [printys, polynomialValues], label=["f(x)" "Nn(x)"])
 
-    savefig(string(a, b, n, "plot.png"))
+    savefig(string(label, n, "plot.png"))
 end
 
 function testFunctions()
@@ -77,21 +77,22 @@ end
 
 function main()
     # testFunctions()
-    # rysujNnfx(x -> ℯ^x, 0.0, 1.0, 5)
-    # rysujNnfx(x -> ℯ^x, 0.0, 1.0, 10)
-    # rysujNnfx(x -> ℯ^x, 0.0, 1.0, 15)
 
-    # rysujNnfx(x -> x^2*sin(x), -1.0, 1.0, 5)
-    # rysujNnfx(x -> x^2*sin(x), -1.0, 1.0, 10)
-    # rysujNnfx(x -> x^2*sin(x), -1.0, 1.0, 15)
+    rysujNnfx("e^x", x -> ℯ^x, 0.0, 1.0, 5)
+    rysujNnfx("e^x", x -> ℯ^x, 0.0, 1.0, 10)
+    rysujNnfx("e^x", x -> ℯ^x, 0.0, 1.0, 15)
 
-    # rysujNnfx(x -> abs(x), -1.0, 1.0, 5)
-    # rysujNnfx(x -> abs(x), -1.0, 1.0, 10)
-    # rysujNnfx(x -> abs(x), -1.0, 1.0, 15)
+    rysujNnfx("x^2*sinx", x -> x^2 * sin(x), -1.0, 1.0, 5)
+    rysujNnfx("x^2*sinx", x -> x^2 * sin(x), -1.0, 1.0, 10)
+    rysujNnfx("x^2*sinx", x -> x^2 * sin(x), -1.0, 1.0, 15)
 
-    rysujNnfx(x -> 1.0 / (1 + x^2), -5.0, 5.0, 5)
-    rysujNnfx(x -> 1.0 / (1 + x^2), -5.0, 5.0, 10)
-    rysujNnfx(x -> 1.0 / (1 + x^2), -5.0, 5.0, 15)
+    rysujNnfx("absx", x -> abs(x), -1.0, 1.0, 5)
+    rysujNnfx("absx", x -> abs(x), -1.0, 1.0, 10)
+    rysujNnfx("absx", x -> abs(x), -1.0, 1.0, 15)
+
+    rysujNnfx("1.01+x^2", x -> 1.0 / (1 + x^2), -5.0, 5.0, 5)
+    rysujNnfx("1.01+x^2", x -> 1.0 / (1 + x^2), -5.0, 5.0, 10)
+    rysujNnfx("1.01+x^2", x -> 1.0 / (1 + x^2), -5.0, 5.0, 15)
 end
 
 main()

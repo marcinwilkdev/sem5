@@ -11,7 +11,7 @@
 \begin{document}
 
 \begin{center}
-	\textbf{\LARGE Sprawozdanie lista 3} \\
+	\textbf{\LARGE Sprawozdanie lista 4} \\
 	{\large Marcin Wilk 261722} \\
 
 \end{center}
@@ -24,6 +24,9 @@ punktów $(x)$ oraz wartości funkcji w tych punktach $(f)$.
 
 \noindent \textbf{Opis rozwiązania} \\
 Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
+Algorytm tworzy po kolei wszystkie ilorazy różnicowe każdego stopnia
+(od $1$ do $n$), przy pomocy wyników z poprzedniego stopnia i pierwszy wynik
+z każdego stopnia dodaje do rezultatu.
 
 \noindent \textbf{Pseudokod}
 
@@ -56,6 +59,9 @@ dla podanego punktu $(t)$.
 
 \noindent \textbf{Opis rozwiązania} \\
 Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
+Algorytm iteracyjnie powiększa wielomian w każdym kroku biorąc kolejne od
+końca ilorazy różnicowe i podkładając je do wzoru. Na samym końcu otrzyma kompletny
+wielomian więc wylicza jego wartość w zadanym punkcie.
 
 \noindent \textbf{Pseudokod}
 \begin{algorithmic}
@@ -77,13 +83,19 @@ Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
 
 \noindent \textbf{Opis problemu} \\
 Napisać funkcję obliczającą współczynniki postaci naturalnej wielomianu
-przy pomocy ilorazów różnicowych.
+przy pomocy podanych punktów $(x)$ oraz ilorazów różnicowych $(fx)$.
 
 \noindent \textbf{Opis rozwiązania} \\
 Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
+Algorytm wykorzystuje metodę z poprzedniego zadania do wygenerowania tablicy
+współczynników naturalnej postaci wielomianu. Robi to poprzez przesunięcie
+współczynników w prawo, a następnie odjęcie współczynników pomnożonych przez
+wartości punktów. Nastepnie dodaje kolejny iloraz różnicowy do pierwszego
+współczynniku.
 
 \noindent \textbf{Pseudokod}
 \begin{algorithmic}
+	\State \textbf{Input:} $x, fx$
 	\State $a \gets [fx[end]]$
 
 	\For{$i $ \textbf{in} $length(x)-1$ \textbf{downto} $1$}
@@ -105,27 +117,54 @@ Zaimplementowanie algorytmu i przetestowanie na przykładowych funkcjach.
 \noindent \textbf{\large Zadanie 4}
 
 \noindent \textbf{Opis problemu} \\
-Napisać funkcję interpolującą zadana funkcję na danym przedziale,
-która następnie plotuje zadaną funkcję oraz zinterpolowany wielomian.
+Napisać funkcję interpolującą zadana funkcję $(f)$ na danym przedziale $(a, b)$,
+podzielonym $(n)$ razy, która następnie plotuje zadaną funkcję oraz zinterpolowany wielomian.
 
 \noindent \textbf{Opis rozwiązania} \\
 Zaimplementować funkcję przy pomocy poprzednio zaimplemenotwanych algorytmów
 oraz użyć wbudowane biblioteki do plotowania.
+Algorytm najpierw generuje dane do użycia w poprzednio zaimplementowanym
+algorytmie wyznaczania ilorazów różnicowych, a następnie generuje dane
+porzebne do utworzenia wykresów funkcji oraz zinterpolowanego wielomianu.
+
+\pagebreak
 
 \noindent \textbf{Pseudokod}
 \begin{algorithmic}
 	\State \textbf{Input:} $f, a, b, n$
     \State $h \gets (b - a) / n$
-    \State $xs \gets [a + k * h for k in 0:n]$
-    \State $ys \gets [f(x) for x in xs]$
+    \State $xs \gets []$
+    \State $ys \gets []$
+
+    \For{$k $ \textbf{in} $0$ \textbf{to} $n$}
+
+    \State $xs.push(a + k * h)$
+    \State $ys.push(f(a + k * h))$
+
+    \EndFor
+
     \State $ilorazy \gets ilorazyRoznicowe(xs, ys)$
 
-    \State $n *\gets 100$
+    \State $n \gets n*100$
     \State $h \gets (b - a) / n$
 
-    \State $printxs \gets [a + k * h for k in 0:n]$
-    \State $printys \gets [f(x) for x in printxs]$
-    \State $polynomialValues \gets [warNewton(xs, ilorazy, x) for x in printxs]$
+    \State $printxs \gets []$
+    \State $printys \gets []$
+
+    \For{$k $ \textbf{in} $0$ \textbf{to} $n$}
+
+    \State $printxs.push(a + k * h)$
+    \State $printys.push(f(a + k * h))$
+
+    \EndFor
+
+    \State $polynomialValues \gets []$
+
+    \For{$x $ \textbf{in} $printxs$}
+
+    \State $polynomialValues.push(warNewton(xs, ilorazy, x))$
+
+    \EndFor
 
     \State $plot(printxs, [printys, polynomialValues])$
 \end{algorithmic}
@@ -142,24 +181,51 @@ a) $e^x$, $[0,1]$, $n=5,10,15$
 
 b) $x^2sin(x)$, $[-1,1]$, $n=5,10,15$
 
+\pagebreak
+
 \noindent \textbf{Rezultat}
 
 \begin{center}
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		\textbf{Pierwiastek} & \textbf{Wyliczone $x$} & \textbf{Wyliczone $f(x)$}    & \textbf{Liczba iteracji} \\
-		\hline
-		$>1$                 & $1.51220703125$        & $2.4548768085885797*10^{5}$  & $10$                     \\
-		\hline
-		$<1$                 & $0.619140625$          & $-4.8812505882511736*10^{5}$ & $8$                      \\
-		\hline
-	\end{tabular}
+	\includegraphics[scale=0.6]{e^x500plot.png}
+
+	\textbf{$e^x$ $n=5$}
 \end{center}
 
-\noindent \textbf{Wnioski} \\
-Jeżeli dobrze przekształcimy funcję, której rozwiązania chcemy wyznaczyć
+\begin{center}
+	\includegraphics[scale=0.6]{e^x1000plot.png}
+
+	\textbf{$e^x$ $n=10$}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{e^x1500plot.png}
+
+	\textbf{$e^x$ $n=15$}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{x^2*sinx500plot.png}
+
+	\textbf{$x^2sin(x)$ $n=5$}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{x^2*sinx1000plot.png}
+
+	\textbf{$x^2sin(x)$ $n=10$}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{x^2*sinx1500plot.png}
+
+	\textbf{$x^2sin(x)$ $n=15$}
+\end{center}
 
 \pagebreak
+
+\noindent \textbf{Wnioski} \\
+Dla danych funkcji metoda interpolacji wielomianowej
+bardzo dobrze jest w stanie przybliżyć \\ wartości funkcji.
 
 \noindent \textbf{\large Zadanie 6}
 
@@ -168,62 +234,54 @@ Przetestować funkcję z poprzedniego zadania na kilku przykładach żeby
 zaprezentować zjawisko rozbieżności.
 
 \noindent \textbf{Opis rozwiązania} \\
-Zastosować algorytmy do odszukania pierwiastków i porównać wyniki.
+Uruchomić funkcję używając jako danych wejściowych:
+
+a) $|x|$, $[-1,1]$, $n=5,10,15$
+
+b) $\frac{1}{1+x^2}$, $[-5,5]$, $n=5,10,15$
 
 \noindent \textbf{Rezultat}
 
-\noindent \textbf{$f_1(x) = e^{1-x} - 1$}
-
 \begin{center}
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		\textbf{Algorytm} & \textbf{Wyliczone $x$} & \textbf{Wyliczone $f(x)$}   & \textbf{Liczba iteracji} \\
-		\hline
-		Bisekcji          & $1.0000038146972656$   & $-3.814689989667386*10^{6}$ & $17$                     \\
-		\hline
-		Newtona           & $0.9999984358892101$   & $1.5641120130194253*10^{6}$ & $4$                      \\
-		\hline
-		Siecznych         & $1.000006725645982$    & $-6.725623364789435*10^{6}$ & $16$                     \\
-		\hline
-	\end{tabular}
+	\includegraphics[scale=0.6]{absx500plot.png}
+
+	\textbf{$|x|$ $n=5$}
 \end{center}
 
-\noindent \textbf{$f_2(x) = xe^{-x}$}
+\begin{center}
+	\includegraphics[scale=0.6]{absx1000plot.png}
+
+	\textbf{$|x|$ $n=10$}
+\end{center}
 
 \begin{center}
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		\textbf{Algorytm} & \textbf{Wyliczone $x$}      & \textbf{Wyliczone $f(x)$}  & \textbf{Liczba iteracji} \\
-		\hline
-		Bisekcji          & $7.62939453125*10^{6}$      & $7.62933632381113*10^{6}$  & $16$                     \\
-		\hline
-		Newtona           & $14.398662765680003$        & $8.03641534421721*10^{6}$  & $10$                     \\
-		\hline
-		Siecznych         & $7.2229790848421516*10^{6}$ & $7.222926913603708*10^{6}$ & $31$                     \\
-		\hline
-	\end{tabular}
+	\includegraphics[scale=0.6]{absx1500plot.png}
+
+	\textbf{$|x|$ $n=15$}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{1.01+x^2500plot.png}
+
+	\textbf{$\frac{1}{1+x^2}$ $n=5$}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{1.01+x^21000plot.png}
+
+	\textbf{$\frac{1}{1+x^2}$ $n=10$}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{1.01+x^21500plot.png}
+
+	\textbf{$\frac{1}{1+x^2}$ $n=15$}
 \end{center}
 
 \noindent \textbf{Wnioski} \\
-W przypadku drugiej funkcji sytuacja wygląda podobnie do poprzedniego zadania, metoda Newtona daje
-najszybsze rezultaty, a siecznych najwolniejsze, jednak dla pierwszej funkcji metoda bisekcji jest najwolniejsza.
-W tym przypadku wpływ na to może mieć wybór odcinków początkowych nieprzychylnych dla danych metod.
-
-\begin{center}
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		\textbf{Wnioski} & \textbf{Wyliczone $x$} & \textbf{Wyliczone $f(x)$}   & \textbf{Liczba iteracji} \\
-		\hline
-		Pierwszy         & $0.9999999810061002$   & $1.8993900008368314*10^{8}$ & $5$                      \\
-		\hline
-		Drugi            & $14.380524159896261$   & $8.173205649825554*10^{6}$  & $4$                      \\
-		\hline
-		Trzeci           & $pf(x_0) = 0.0$        & $pf(x_0) = 0.0$             & $pf(x_0) = 0.0$          \\
-		\hline
-	\end{tabular}
-\end{center}
-
-Metoda Newtona radzi sobie z różnymi wybranymi $x_0$ dla obu funkcji, chyba, że jest to równe $0$
-(wtedy wartość pochodnej funkcji za bardzo się zbliża do zera).
+W przypadku funkcji z tego zadania widać, że interpolacja wielomianowa
+dobrze aproksymuje funkcję tylko w okolicach środka przedziału, a przy
+końcach zaczyna się bardzo mocno rozjeżdżać, w żaden sposób nie
+przypominając danej funkcji.
 
 \end{document}
