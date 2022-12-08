@@ -60,10 +60,6 @@ function rysujNnfx(f, a::Float64, b::Float64, n::Int)
     printys = [f(x) for x in printxs]
     polynomialValues = [warNewton(xs, ilorazy, x) for x in printxs]
 
-    println(length(printxs))
-    println(length(printys))
-    println(length(polynomialValues))
-
     plot(printxs, [printys, polynomialValues], label=["f(x)" "Nn(x)"])
 
     savefig(string(a, b, n, "plot.png"))
