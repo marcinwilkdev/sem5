@@ -88,7 +88,7 @@ end # blockmat
 
 
 
-blockmat(8, 2, 1.0, "asdf")
+blockmat(500000, 50, 1.0, "asdf")
  
 
 end # matrixgen
