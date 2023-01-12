@@ -44,7 +44,8 @@ procedure Main is
 
   task type Philosopher
    (Start_Semaphore : Ptr_Semaphore; Left_Fork : Ptr_Mutex;
-    Right_Fork      : Ptr_Mutex; Id : Integer; To_Eat : Integer)
+    Right_Fork      : Ptr_Mutex; Id : Integer; Left_Fork_Id : Integer;
+    Right_Fork_Id   : Integer; To_Eat : Integer)
   ;
   type Ptr_Philosoper is access Philosopher;
 
@@ -53,10 +54,20 @@ procedure Main is
   begin
     Start_Semaphore.Wait;
     while Left_To_Eat > 0 loop
-      Put_Line ("Philosopher " & Id'Img & " is thinking");
+      Put_Line ("Philosopher" & Id'Img & " is thinking");
+      Put_Line
+       ("Philosopher" & Id'Img & " wants to take" & Left_Fork_Id'Img &
+        " fork");
       Left_Fork.Lock;
+      Put_Line
+       ("Philosopher" & Id'Img & " takes" & Left_Fork_Id'Img & " fork");
+      Put_Line
+       ("Philosopher" & Id'Img & " wants to take" & Right_Fork_Id'Img &
+        " fork");
       Right_Fork.Lock;
-      Put_Line ("Philosopher " & Id'Img & " is eating");
+      Put_Line
+       ("Philosopher" & Id'Img & " takes" & Right_Fork_Id'Img & " fork");
+      Put_Line ("Philosopher" & Id'Img & " is eating");
       Right_Fork.Unlock;
       Left_Fork.Unlock;
 
@@ -77,11 +88,13 @@ procedure Main is
 
     for I in 0 .. N - 2 loop
       Philosophers (I) :=
-       new Philosopher (Start_Semaphore, Forks (I), Forks (I + 1), I, 10);
+       new Philosopher
+        (Start_Semaphore, Forks (I), Forks (I + 1), I, I, I + 1, 10);
     end loop;
 
     Philosophers (N - 1) :=
-     new Philosopher (Start_Semaphore, Forks (N - 1), Forks (0), N - 1, 10);
+     new Philosopher
+      (Start_Semaphore, Forks (N - 1), Forks (0), N - 1, N - 1, 0, 10);
 
     Start_Semaphore.Unlock;
   end Main_Loop;
